@@ -1,0 +1,35 @@
+@startuml
+left to right direction
+:Secretária da universidade: as s 
+:Aluno: as a
+:Professor: as p
+:Usuário: as u
+
+
+rectangle SistemaMatricula {
+
+s --> (Gerar currículo)
+s --> (Manter informações da disciplina)
+s --> (Manter informações dos professores)
+s --> (Manter informações dos alunos)
+s --> (Cancelar matrícula)
+
+
+(Se matricular) as matricular
+matricular <|-- (Se matricular em disciplina obrigatória)
+matricular <|-- (Se matricular em disciplina optativa)
+a --> matricular 
+a --> (Cancelar a matricula)
+a --> (Se inscrever para um semestre)
+a --> (Receber cobrança da matrícula)
+
+p --> (Acessar alunos matriculados em uma disciplina)
+
+u --> (Se cadastrar no sistema)
+u --> (Entrar no sistema)
+}
+
+u <|--  s
+u <|--  a
+u <|--  p
+@enduml
