@@ -1,4 +1,4 @@
-# Nome do projeto
+# Sistema de matrículas
 Projeto da materia de Laboratório de Desenvolvimento de Software em que consiste em projetar um Sistema de Matrículas para uma Universidade.
 
 ## Integrantes
