@@ -16,11 +16,11 @@ s --> (Manter informações da disciplina)
 s --> (Manter informações dos professores)
 s --> (Manter informações dos alunos)
 
-(Se matricular) as matricular
-(Se matricular em disciplina obrigatória) .>  matricular : include
- (Se matricular em disciplina optativa) .> matricular : include
+(Matricular) as matricular
+(Matricular em disciplina obrigatória) .>  matricular : include
+ (Matricular em disciplina optativa) .> matricular : include
 
-(Se inscrever para um semestre) as inscreverSemestre
+(Inscrever para um semestre) as inscreverSemestre
 a --> matricular
 a --> inscreverSemestre
 
@@ -31,7 +31,7 @@ gerarBoleto --> a
 
 p --> (Acessar alunos matriculados em uma disciplina)
 
-u --> (Se cadastrar no sistema)
+u --> (Cadastrar no sistema)
 u --> (Entrar no sistema)
 
 rm --> (Cancelar a matricula)

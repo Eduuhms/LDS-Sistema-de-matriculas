@@ -17,8 +17,8 @@ class Aluno{
   - curso: Curso
   - disciplinasObrigatorias: List<Disciplina>
   - disciplinasOptativas: List<Disciplina>
-  - maxObrigatorias: int = 4
-  - maxOptativas: int = 2
+  - maxObrigatorias: const = 4
+  - maxOptativas: const = 2
   + confirmarMatricula(): void
   + cancelarMatricula(disciplina: Disciplina): void
   + matricularDisciplina(disciplina: Disciplina): void
@@ -39,8 +39,8 @@ class Disciplina {
   - creditos: int
   - ehObrigatoria: boolean
   - alunosMatriculados: List<Aluno>
-  - maxAlunos: int = 60
-  - minAlunos: int = 3
+  - maxAlunos: const = 60
+  - minAlunos: const = 3
   - status: String
   + statusDisciplina(): String
   + gerarCurriculo(): void
@@ -54,7 +54,6 @@ class Disciplina {
 class Cobranca {
   - id: int
   - aluno: Aluno
-  - curso: Curso
   - valor: float
   + calcularValorTotal(): float
 }
@@ -87,6 +86,7 @@ ResponsavelMatricula <|-- Aluno
 ResponsavelMatricula<|-- Secretaria
 Usuario<|-- ResponsavelMatricula
 
+Cobranca "0..*" -- "1" Aluno
 Aluno "1" -- "0..*" Curso 
 Aluno "3..60" -- "1..*" Disciplina 
 Professor "1" -- "0..*" Disciplina 
