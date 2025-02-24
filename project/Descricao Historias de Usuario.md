@@ -9,7 +9,8 @@
 
 - Como Responsável financeiro, quero gerar o boleto de cobrança para que os alunos possam paga-lo;
 
-- Como aluno, quero me matricular na universidade para que assim possa realizar a disciplina;
+- Como aluno, quero me matricular na universidade para que assim possa realizar a disciplina optativa;
+- Como aluno, quero me matricular na universidade para que assim possa realizar a disciplina obrigatoria;
 - Como aluno, quero me inscrever no semestre para estudar;
 - Como aluno, quero receber a cobrança da matricula para poder paga-la;
 
