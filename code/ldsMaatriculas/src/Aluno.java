@@ -10,8 +10,8 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
     private List<Disciplina> disciplinasOptativas;
     
 
-    public Aluno(int id, String nome, String email, String senha, String matricula, Curso curso) {
-        super(id, nome, email, senha, TipoUsuario.ALUNO); 
+    public Aluno(String nome, String email, String senha, String matricula, Curso curso) {
+        super(nome, email, senha, TipoUsuario.ALUNO); 
         this.matricula = matricula;
         this.curso = curso;
     }

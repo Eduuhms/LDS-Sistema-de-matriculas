@@ -1,7 +1,7 @@
 public class Secretaria extends Usuario implements ResponsavelMatricula {
 
-    public Secretaria(int id, String nome, String email, String senha) {
-        super(id, nome, email, senha, TipoUsuario.SECRETARIA); // Define o tipo como SECRETARIA
+    public Secretaria(String nome, String email, String senha) {
+        super(nome, email, senha, TipoUsuario.SECRETARIA); // Define o tipo como SECRETARIA
     }
 
     public void cancelarMatricula(Disciplina disciplina, Aluno aluno) {}
