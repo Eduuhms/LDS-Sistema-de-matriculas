@@ -33,7 +33,7 @@ public class Usuario {
     }
 
      public static Usuario entrar(String email, String senha) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("usuarios.csv"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\usuarios.csv"))) {
             String linha;
             while ((linha = reader.readLine()) != null) {
                 String[] dados = linha.split(",");
