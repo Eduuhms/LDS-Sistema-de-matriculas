@@ -17,7 +17,7 @@ public class Usuario {
     }
 
     public void cadastrar() {
-        try (FileWriter writer = new FileWriter("usuarios.csv", true)) {
+        try (FileWriter writer = new FileWriter("LDS-Sistema-de-matriculas\\code\\ldsMaatriculas\\src\\csv\\usuarios.csv", true)) {
             writer.append(String.valueOf(id)).append(",")
                   .append(nome).append(",")
                   .append(email).append(",")
