@@ -1,1 +1,6 @@
-nome,codigo,creditos,ehObrigatoria,alunosMatriculados,status,maxAlunos,minAlunos
+nome,codigo,creditos,ehObrigatoria,status,maxAlunos,minAlunos
+Calculo,1,4,true,ABERTA,60,3
+AEDS,2,4,true,ABERTA,60,3
+Filosofia,3,4,true,ABERTA,60,3
+Trabalho Interdiciplinar,4,4,true,ABERTA,60,3
+Religiao,5,4,true,ABERTA,60,3
