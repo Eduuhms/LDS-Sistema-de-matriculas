@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 public class Aluno extends Usuario implements ResponsavelMatricula {
@@ -23,6 +25,19 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
 
     private String randomMatricula() {
         return String.valueOf((int) (Math.random() * 1000000));
+    }
+
+    @Override
+    public void cadastrar() {
+        super.cadastrar(); // Chama o método cadastrar da classe Usuario para cadastrar no usuarios.csv
+        try (FileWriter writer = new FileWriter("LDS-Sistema-de-matriculas\\code\\ldsMaatriculas\\src\\csv\\alunos.csv", true)) {
+            writer.append("\n")
+                  .append(String.valueOf(id)).append(",")
+                  .append(matricula).append(",")
+                  .append(null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void confirmarMatricula() {}
