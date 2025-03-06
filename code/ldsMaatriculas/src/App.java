@@ -2,6 +2,9 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        String nome;
+        String email;
+        String senha;
         Scanner scanner = new Scanner(System.in);
         int option;
 
@@ -17,27 +20,19 @@ public class App {
 
             switch (option) {
                 case 1:
-                    Usuario usuario = Usuario.entrar("gglage11@gmail.com", "123");
-                    System.out.println("Usuário " + usuario.getNome() + " entrou no sistema.");
-                break;
+                    Login(scanner);
+                    break;
                 case 2:
-                String nome = scanner.next();
-                String email = scanner.next();
-                String senha = scanner.next();
-                    Aluno aluno = new Aluno(nome, email, senha);
-                    aluno.cadastrar();
-                break;
+                    cadastrarAluno(scanner);
+                    break;
                 case 3:
-                    Professor professor = new Professor("Cleiton", "cleiton@gmail.com", "123");
-                    professor.cadastrar();
-                break;
+                    cadastrarProfessor(scanner);
+                    break;
                 case 4:
-                    Secretaria secretario = new Secretaria("Sinval", "sinval@gmail.com", "123");
-                    secretario.cadastrar();
+                    cadastrarSecretario(scanner);
                     break;
                 case 5:
-                   ResponsavelFinanceiro responsavel = new ResponsavelFinanceiro("Gabito", "gglage11@gmail.com", "123");
-                   responsavel.cadastrar();
+                    cadastrarResponsavelFinanceiro(scanner);
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -49,5 +44,47 @@ public class App {
 
         scanner.close();
     }
-    
+
+    private static void Login(Scanner scanner) {
+        System.out.println("Email:");
+        String email = scanner.next();
+        System.out.println("Senha:");
+        String senha = scanner.next();
+        Usuario usuario = Usuario.entrar(email, senha);
+        System.out.println("Bem Vindo, " + usuario.getNome());
+    }
+
+    private static void cadastrarAluno(Scanner scanner) {
+        String[] dados = lerDadosUsuario(scanner);
+        Aluno aluno = new Aluno(dados[0], dados[1], dados[2]);
+        aluno.cadastrar();
+    }
+
+    private static void cadastrarProfessor(Scanner scanner) {
+        String[] dados = lerDadosUsuario(scanner);
+        Professor professor = new Professor(dados[0], dados[1], dados[2]);
+        professor.cadastrar();
+    }
+
+    private static void cadastrarSecretario(Scanner scanner) {
+        String[] dados = lerDadosUsuario(scanner);
+        Secretaria secretario = new Secretaria(dados[0], dados[1], dados[2]);
+        secretario.cadastrar();
+    }
+
+    private static void cadastrarResponsavelFinanceiro(Scanner scanner) {
+        String[] dados = lerDadosUsuario(scanner);
+        ResponsavelFinanceiro responsavel = new ResponsavelFinanceiro(dados[0], dados[1], dados[2]);
+        responsavel.cadastrar();
+    }
+
+    private static String[] lerDadosUsuario(Scanner scanner) {
+        System.out.println("Nome:");
+        String nome = scanner.next();
+        System.out.println("Email:");
+        String email = scanner.next();
+        System.out.println("Senha:");
+        String senha = scanner.next();
+        return new String[]{nome, email, senha};
+    }
 }
