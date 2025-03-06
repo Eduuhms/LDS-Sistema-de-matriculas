@@ -12,10 +12,19 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
 
     public Aluno(String nome, String email, String senha, String matricula, Curso curso) {
         super(nome, email, senha, TipoUsuario.ALUNO); 
-        this.matricula = matricula;
+        this.matricula = randomMatricula();
         this.curso = curso;
     }
     
+    public Aluno(String nome, String email, String senha) {
+        super(nome, email, senha, TipoUsuario.ALUNO); 
+        this.matricula = randomMatricula();
+    }
+
+    private String randomMatricula() {
+        return String.valueOf((int) (Math.random() * 1000000));
+    }
+
     public void confirmarMatricula() {}
     public void cancelarMatricula(Disciplina disciplina) {}
     

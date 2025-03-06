@@ -17,14 +17,27 @@ public class App {
 
             switch (option) {
                 case 1:
-                    break;
+                    Usuario usuario = Usuario.entrar("gglage11@gmail.com", "123");
+                    System.out.println("Usuário " + usuario.getNome() + " entrou no sistema.");
+                break;
                 case 2:
-                    break;
+                String nome = scanner.next();
+                String email = scanner.next();
+                String senha = scanner.next();
+                    Aluno aluno = new Aluno(nome, email, senha);
+                    aluno.cadastrar();
+                break;
                 case 3:
-                    break;
+                    Professor professor = new Professor("Cleiton", "cleiton@gmail.com", "123");
+                    professor.cadastrar();
+                break;
                 case 4:
+                    Secretaria secretario = new Secretaria("Sinval", "sinval@gmail.com", "123");
+                    secretario.cadastrar();
                     break;
                 case 5:
+                   ResponsavelFinanceiro responsavel = new ResponsavelFinanceiro("Gabito", "gglage11@gmail.com", "123");
+                   responsavel.cadastrar();
                     break;
                 case 0:
                     System.out.println("Saindo...");

@@ -21,19 +21,20 @@ public class Usuario {
     }
 
     public void cadastrar() {
-        try (FileWriter writer = new FileWriter("code\\ldsMaatriculas\\src\\csv\\usuarios.csv", true)) {
-            writer.append(String.valueOf(id)).append(",")
+        try (FileWriter writer = new FileWriter("LDS-Sistema-de-matriculas\\code\\ldsMaatriculas\\src\\csv\\usuarios.csv", true)) {
+            writer.append("\n")
+                  .append(String.valueOf(id)).append(",")
                   .append(nome).append(",")
                   .append(email).append(",")
                   .append(senha).append(",")
-                  .append(tipo.name()).append("\n");
+                  .append(tipo.name());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
      public static Usuario entrar(String email, String senha) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\usuarios.csv"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("LDS-Sistema-de-matriculas\\code\\ldsMaatriculas\\src\\csv\\usuarios.csv"))) {
             String linha;
             while ((linha = reader.readLine()) != null) {
                 String[] dados = linha.split(",");
@@ -71,5 +72,9 @@ public class Usuario {
 
     public int getId() {
         return id;
+    }
+
+    public String getNome() {
+        return nome;
     }
 }

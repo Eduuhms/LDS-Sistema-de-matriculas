@@ -1,1 +1,6 @@
 id,nome,email,senha,tipo
+1,Gabito,gglage11@gmail.com,123,ALUNO
+1,Cleiton,cleiton@gmail.com,123,PROFESSOR
+2,Sinval,sinval@gmail.com,123,SECRETARIA
+3,Gabito,gglage11@gmail.com,123,RESPOSAVELFINANCEIRO
+1,eduado,cuzao@gmail.com,souboiola,ALUNO
