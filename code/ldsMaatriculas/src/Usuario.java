@@ -30,4 +30,8 @@ public class Usuario {
 
     public void entrar() {}
     public void sair() {}
+
+    public TipoUsuario getTipo() {
+        return tipo;
+    }
 }
