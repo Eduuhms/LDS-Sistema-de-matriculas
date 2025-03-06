@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Usuario {
-    private static int proximoId = 1; 
+    private static int proximoId = encontrarUltimoId() + 1; // Inicializa com o último ID + 1
 
     protected int id;
     protected String nome;
@@ -20,8 +20,33 @@ public class Usuario {
         this.tipo = tipo;
     }
 
+    private static int encontrarUltimoId() {
+        int ultimoId = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\usuarios.csv"))) {
+            String linha;
+            boolean primeiraLinha = true; // Flag para identificar a primeira linha
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false; // Pula a primeira linha
+                    continue;
+                }
+                if (linha.trim().isEmpty()) {
+                    continue; // Ignora linhas vazias
+                }
+                String[] dados = linha.split(",");
+                int idAtual = Integer.parseInt(dados[0]);
+                if (idAtual > ultimoId) {
+                    ultimoId = idAtual;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ultimoId;
+    }
+
     public void cadastrar() {
-        try (FileWriter writer = new FileWriter("LDS-Sistema-de-matriculas\\code\\ldsMaatriculas\\src\\csv\\usuarios.csv", true)) {
+        try (FileWriter writer = new FileWriter("code\\ldsMaatriculas\\src\\csv\\usuarios.csv", true)) {
             writer.append("\n")
                   .append(String.valueOf(id)).append(",")
                   .append(nome).append(",")
@@ -33,20 +58,22 @@ public class Usuario {
         }
     }
 
-     public static Usuario entrar(String email, String senha) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("LDS-Sistema-de-matriculas\\code\\ldsMaatriculas\\src\\csv\\usuarios.csv"))) {
+    public static Usuario entrar(String email, String senha) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\usuarios.csv"))) {
             String linha;
             while ((linha = reader.readLine()) != null) {
+                if (linha.trim().isEmpty()) {
+                    continue; // Ignora linhas vazias
+                }
                 String[] dados = linha.split(",");
                 if (dados[2].equals(email) && dados[3].equals(senha)) {
-
                     int id = Integer.parseInt(dados[0]);
                     String nome = dados[1];
                     TipoUsuario tipo = TipoUsuario.valueOf(dados[4]);
 
                     switch (tipo) {
                         case ALUNO:
-                            return new Aluno(nome, email, senha, "", null); 
+                            return new Aluno(nome, email, senha, "", null);
                         case PROFESSOR:
                             return new Professor(nome, email, senha);
                         case SECRETARIA:
@@ -59,7 +86,7 @@ public class Usuario {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null; 
+        return null;
     }
 
     public void sair() {
