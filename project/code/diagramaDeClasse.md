@@ -82,8 +82,8 @@ cancelarMatricula(disciplina: Disciplina, aluno:Aluno): void
 
 Usuario <|-- Professor
 Usuario <|-- ResponsavelFinanceiro
-ResponsavelMatricula <|-- Aluno
-ResponsavelMatricula<|-- Secretaria
+ResponsavelMatricula <|.. Aluno
+ResponsavelMatricula<|.. Secretaria
 Usuario<|-- ResponsavelMatricula
 
 Cobranca "0..*" -- "1" Aluno
