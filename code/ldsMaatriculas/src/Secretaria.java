@@ -4,7 +4,7 @@ public class Secretaria extends Usuario implements ResponsavelMatricula {
         super(id, nome, email, senha, TipoUsuario.SECRETARIA); // Define o tipo como SECRETARIA
     }
 
-    public void cancelarMatricula(){}
+    public void cancelarMatricula(Disciplina disciplina, Aluno aluno) {}
     
     public void gerarCurriculo() {}
     public void attInformacoesAluno() {}
