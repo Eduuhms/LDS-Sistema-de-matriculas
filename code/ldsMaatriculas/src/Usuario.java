@@ -1,8 +1,10 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class Usuario {
-    private static int proximoId = 1; // Variável estática para controlar o próximo ID
+    private static int proximoId = 1; 
 
     protected int id;
     protected String nome;
@@ -30,12 +32,37 @@ public class Usuario {
         }
     }
 
-    public void entrar() {
-        // Implementação do login
+     public static Usuario entrar(String email, String senha) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("usuarios.csv"))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                String[] dados = linha.split(",");
+                if (dados[2].equals(email) && dados[3].equals(senha)) {
+
+                    int id = Integer.parseInt(dados[0]);
+                    String nome = dados[1];
+                    TipoUsuario tipo = TipoUsuario.valueOf(dados[4]);
+
+                    switch (tipo) {
+                        case ALUNO:
+                            return new Aluno(nome, email, senha, "", null); 
+                        case PROFESSOR:
+                            return new Professor(nome, email, senha);
+                        case SECRETARIA:
+                            return new Secretaria(nome, email, senha);
+                        default:
+                            throw new IllegalArgumentException("Tipo de usuário desconhecido: " + tipo);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null; 
     }
 
     public void sair() {
-        // Implementação do logout
+        System.out.println("Usuário " + nome + " saiu do sistema.");
     }
 
     public TipoUsuario getTipo() {
