@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class App {
@@ -14,6 +15,7 @@ public class App {
             System.out.println("3 - Cadastrar professor");
             System.out.println("4 - Cadastrar secretario(a)");
             System.out.println("5 - Cadastrar responsavel financeiro");
+            System.out.println("6 - Cadastrar e listar cursos"); // Novo caso
             System.out.println("0 - Sair");
             System.out.print("Escolha uma opção: ");
             option = scanner.nextInt();
@@ -34,6 +36,9 @@ public class App {
                 case 5:
                     cadastrarResponsavelFinanceiro(scanner);
                     break;
+                case 6: 
+                    manipularCursos(scanner);
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -51,7 +56,11 @@ public class App {
         System.out.println("Senha:");
         String senha = scanner.next();
         Usuario usuario = Usuario.entrar(email, senha);
-        System.out.println("Bem Vindo, " + usuario.getNome());
+        if (usuario != null) {
+            System.out.println("Bem Vindo, " + usuario.getNome());
+        } else {
+            System.out.println("Email ou senha incorretos.");
+        }
     }
 
     private static void cadastrarAluno(Scanner scanner) {
@@ -86,5 +95,52 @@ public class App {
         System.out.println("Senha:");
         String senha = scanner.next();
         return new String[]{nome, email, senha};
+    }
+
+    // Novo método para manipular cursos
+    private static void manipularCursos(Scanner scanner) {
+        System.out.println("1 - Cadastrar curso");
+        System.out.println("2 - Listar cursos");
+        System.out.print("Escolha uma opção: ");
+        int opcao = scanner.nextInt();
+
+        switch (opcao) {
+            case 1:
+                cadastrarCurso(scanner);
+                break;
+            case 2:
+                listarCursos();
+                break;
+            default:
+                System.out.println("Opção inválida.");
+        }
+    }
+
+    // Método para cadastrar um novo curso
+    private static void cadastrarCurso(Scanner scanner) {
+        System.out.println("ID do curso:");
+        int idCurso = scanner.nextInt();
+        scanner.nextLine(); // Consumir a nova linha
+        System.out.println("Nome do curso:");
+        String nome = scanner.nextLine();
+        System.out.println("Créditos do curso:");
+        int creditos = scanner.nextInt();
+
+        Curso curso = new Curso(idCurso, nome, creditos);
+        curso.salvarCurso();
+        System.out.println("Curso cadastrado com sucesso!");
+    }
+
+    // Método para listar todos os cursos cadastrados
+    private static void listarCursos() {
+        List<Curso> cursos = Curso.carregarCursos();
+        if (cursos.isEmpty()) {
+            System.out.println("Nenhum curso cadastrado.");
+        } else {
+            System.out.println("Cursos cadastrados:");
+            for (Curso curso : cursos) {
+                System.out.println(curso);
+            }
+        }
     }
 }

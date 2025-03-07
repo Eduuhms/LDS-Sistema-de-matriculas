@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Curso {
@@ -6,5 +11,94 @@ public class Curso {
     private int creditos;
     private List<Disciplina> disciplinas;
 
-    public void adicionarDisciplina(Disciplina disciplina) {}
+    public Curso(int idCurso, String nome, int creditos) {
+        this.idCurso = idCurso;
+        this.nome = nome;
+        this.creditos = creditos;
+        this.disciplinas = new ArrayList<>();
+    }
+
+    public void adicionarDisciplina(Disciplina disciplina) {
+        if (disciplina != null) {
+            disciplinas.add(disciplina);
+            System.out.println("Disciplina " + disciplina.getNome() + " adicionada ao curso " + this.nome);
+        } else {
+            System.out.println("Erro: Disciplina inválida.");
+        }
+    }
+
+    public void salvarCurso() {
+        try (FileWriter writer = new FileWriter("code\\ldsMaatriculas\\src\\csv\\cursos.csv", true)) {
+            writer.append(String.valueOf(idCurso)).append(",")
+                  .append(nome).append(",")
+                  .append(String.valueOf(creditos)).append("\n");
+            System.out.println("Curso salvo com sucesso no arquivo cursos.csv.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Curso> carregarCursos() {
+        List<Curso> cursos = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\cursos.csv"))) {
+            String linha;
+            boolean primeiraLinha = true; 
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false;
+                    continue;
+                }
+                String[] dados = linha.split(",");
+                int idCurso = Integer.parseInt(dados[0]);
+                String nome = dados[1];
+                int creditos = Integer.parseInt(dados[2]);
+                cursos.add(new Curso(idCurso, nome, creditos));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return cursos;
+    }
+
+    public int getIdCurso() {
+        return idCurso;
+    }
+
+    public void setIdCurso(int idCurso) {
+        this.idCurso = idCurso;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getCreditos() {
+        return creditos;
+    }
+
+    public void setCreditos(int creditos) {
+        this.creditos = creditos;
+    }
+
+    public List<Disciplina> getDisciplinas() {
+        return disciplinas;
+    }
+
+    public void setDisciplinas(List<Disciplina> disciplinas) {
+        this.disciplinas = disciplinas;
+    }
+
+    @Override
+    public String toString() {
+        return "Curso{" +
+                "idCurso=" + idCurso +
+                ", nome='" + nome + '\'' +
+                ", creditos=" + creditos +
+                ", disciplinas=" + disciplinas +
+                '}';
+    }
 }

@@ -18,4 +18,8 @@ public class Disciplina {
     public void removerAluno(Aluno aluno) {}
     public List<Aluno> alunosMatriculados() { return null; }
     public void cancelarDisciplina() {}
+
+    public String getNome() {
+        return nome;
+    }
 }
