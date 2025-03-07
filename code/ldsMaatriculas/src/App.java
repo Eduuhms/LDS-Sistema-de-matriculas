@@ -118,15 +118,13 @@ public class App {
 
     // Método para cadastrar um novo curso
     private static void cadastrarCurso(Scanner scanner) {
-        System.out.println("ID do curso:");
-        int idCurso = scanner.nextInt();
         scanner.nextLine(); // Consumir a nova linha
         System.out.println("Nome do curso:");
         String nome = scanner.nextLine();
         System.out.println("Créditos do curso:");
         int creditos = scanner.nextInt();
 
-        Curso curso = new Curso(idCurso, nome, creditos);
+        Curso curso = new Curso(nome, creditos);
         curso.salvarCurso();
         System.out.println("Curso cadastrado com sucesso!");
     }
