@@ -28,4 +28,9 @@ public class ResponsavelFinanceiro extends Usuario {
 
     public void notificarCobranca() {
     }
+
+    @Override
+    public void setDados(){
+        return;
+    }
 }

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -50,6 +51,34 @@ public class App {
         scanner.close();
     }
 
+    // private static void lerDisciplinasCsv(){
+    //     try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\usuarios.csv"))) {
+    //         String linha;
+    //         boolean primeiraLinha = true; // Flag para identificar a primeira linha
+    //         while ((linha = reader.readLine()) != null) {
+    //             if (primeiraLinha) {
+    //                 primeiraLinha = false; // Pula a primeira linha
+    //                 continue;
+    //             }
+    //             if (linha.trim().isEmpty()) {
+    //                 continue; // Ignora linhas vazias
+    //             }
+    //             String[] dados = linha.split(",");
+    //             String nome, codigo, status;
+    //             int creditos;
+    //             boolean ehObrigatoria;
+
+    //             nome = dados[0];
+    //             codigo = dados[1];
+    //             creditos = Integer.parseInt(dados[2]);
+    //             ehObrigatoria = Boolean.parseBoolean(dados[3]);
+    //             Disciplina disciplina = new Disciplina(nome, codigo, creditos, ehObrigatoria);
+    //         }
+    //     } catch (IOException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
+
     private static void Login(Scanner scanner) {
         System.out.println("Email:");
         String email = scanner.next();
@@ -57,7 +86,9 @@ public class App {
         String senha = scanner.next();
         Usuario usuario = Usuario.entrar(email, senha);
         if (usuario != null) {
+            usuario.setDados();
             System.out.println("Bem Vindo, " + usuario.getNome());
+            
         } else {
             System.out.println("Email ou senha incorretos.");
         }
@@ -69,9 +100,33 @@ public class App {
         aluno.cadastrar();
     }
 
+    // private static void cadastrarProfessor(Scanner scanner) {
+    //     String[] dados = lerDadosUsuario(scanner);
+    //     Professor professor = new Professor(dados[0], dados[1], dados[2]);
+    //     professor.cadastrar();
+    // }
+
+    // Função de teste
     private static void cadastrarProfessor(Scanner scanner) {
         String[] dados = lerDadosUsuario(scanner);
-        Professor professor = new Professor(dados[0], dados[1], dados[2]);
+        List<String> palavras = new ArrayList<>();
+        String codigo;
+        System.out.println("Quantidade disciplinas: ");
+        List<Disciplina> disciplinas = new ArrayList<>();
+        int qnt = scanner.nextInt();
+        while (qnt != 0){
+            codigo = scanner.next();
+            Disciplina disciplina = new Disciplina(codigo);
+            try {
+                disciplina.preencherComDadosCsv();
+                disciplinas.add(disciplina);
+                qnt --;
+                
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }
+        Professor professor = new Professor(dados[0], dados[1], dados[2], disciplinas);
         professor.cadastrar();
     }
 

@@ -42,6 +42,11 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
 
     public void confirmarMatricula() {}
     public void cancelarMatricula(Disciplina disciplina) {}
+
+    @Override
+    public void setDados(){
+        return;
+    }
     
     @Override
     public void cancelarMatricula(Disciplina disciplina, Aluno aluno){}

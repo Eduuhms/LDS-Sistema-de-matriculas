@@ -1,17 +1,3 @@
 id,nome,email,senha,tipo
-1,Gabito,gglage11@gmail.com,123,ALUNO
-1,Cleiton,cleiton@gmail.com,123,PROFESSOR
-2,Sinval,sinval@gmail.com,123,SECRETARIA
-3,Gabito,gglage11@gmail.com,123,RESPOSAVELFINANCEIRO
-1,eduado,cuzao@gmail.com,souboiola,ALUNO
-<<<<<<< HEAD
-1,Roberto,dfasd,123,PROFESSOR
-=======
-1,eduardo,edu@gmail.com,123456,ALUNO
-3,eduardo,eduar,1234566,ALUNO
-5,a,a,a,ALUNO
-6,a,a,a,ALUNO
-7,b,b,b,ALUNO
-
-8,a,a,a,ALUNO
->>>>>>> a9356f5f9359cd44696c165ca8b93fb7a25fe94f
+1,r,r,r,PROFESSOR
+2,t,t,t,PROFESSOR

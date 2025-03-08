@@ -3,7 +3,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Usuario {
+public abstract class Usuario {
     private static int proximoId = encontrarUltimoId() + 1; // Inicializa com o último ID + 1
 
     protected int id;
@@ -19,6 +19,17 @@ public class Usuario {
         this.senha = senha;
         this.tipo = tipo;
     }
+
+    public Usuario(String nome, String email, String senha, TipoUsuario tipo, int id){
+        this.id = proximoId++;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.tipo = tipo;
+        this.id = id;
+    }
+
+    public abstract void setDados();
 
     private static int encontrarUltimoId() {
         int ultimoId = 0;
@@ -67,7 +78,7 @@ public class Usuario {
                 }
                 String[] dados = linha.split(",");
                 if (dados[2].equals(email) && dados[3].equals(senha)) {
-                    int id = Integer.parseInt(dados[0]);
+                    String id = dados[0];
                     String nome = dados[1];
                     TipoUsuario tipo = TipoUsuario.valueOf(dados[4]);
 
@@ -75,7 +86,7 @@ public class Usuario {
                         case ALUNO:
                             return new Aluno(nome, email, senha, "", null);
                         case PROFESSOR:
-                            return new Professor(nome, email, senha);
+                            return new Professor(nome, email, senha, id);
                         case SECRETARIA:
                             return new Secretaria(nome, email, senha);
                         default:
@@ -103,5 +114,9 @@ public class Usuario {
 
     public String getNome() {
         return nome;
+    }
+
+    public String getEmail(){
+        return email;
     }
 }

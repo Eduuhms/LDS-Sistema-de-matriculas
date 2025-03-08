@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Disciplina {
@@ -11,6 +15,25 @@ public class Disciplina {
     private List<Aluno> alunosMatriculados;
     private String status;
 
+    public Disciplina(String nome,
+        String codigo,
+        int creditos,
+        boolean ehObrigatoria){
+            this.codigo = codigo;
+            this.creditos = creditos;
+            this.ehObrigatoria = ehObrigatoria;
+            this.alunosMatriculados = new ArrayList<Aluno>();
+            this.status = "ABERTA";
+        }
+
+    public Disciplina(String codigo){
+        this.codigo = codigo;
+        this.creditos = 0;
+        this.ehObrigatoria = false;
+        this.alunosMatriculados = new ArrayList<Aluno>();
+        this.status = "ABERTA";
+    }
+
     public String statusDisciplina() { return ""; }
     public void gerarCurriculo() {}
     public void fecharMatriculas() {}
@@ -19,7 +42,41 @@ public class Disciplina {
     public List<Aluno> alunosMatriculados() { return null; }
     public void cancelarDisciplina() {}
 
+    public void preencherComDadosCsv() throws Exception{
+        try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv"))) {
+            String linha;
+            boolean primeiraLinha = true; // Flag para identificar a primeira linha
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false; // Pula a primeira linha
+                    continue;
+                }
+                if (linha.trim().isEmpty()) {
+                    continue; // Ignora linhas vazias
+                }
+
+                String[] dados = linha.split(",");
+                String codigoCsv = dados[1];
+
+                if (codigoCsv.equals(this.codigo)){
+                    this.nome = dados[0];
+                    this.creditos = Integer.parseInt(dados[2]);
+                    this.ehObrigatoria = Boolean.parseBoolean(dados[3]);
+                    return;
+                }
+                
+            }
+            throw new Exception("Disciplina não encontrada no csv!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getNome() {
         return nome;
+    }
+
+    public String getCodigo(){
+        return codigo;
     }
 }

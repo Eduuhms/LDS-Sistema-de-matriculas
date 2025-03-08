@@ -33,4 +33,9 @@ public class Secretaria extends Usuario implements ResponsavelMatricula {
 
     public void attInformacoesProfessor() {
     }
+
+    @Override
+    public void setDados(){
+        return;
+    }
 }
