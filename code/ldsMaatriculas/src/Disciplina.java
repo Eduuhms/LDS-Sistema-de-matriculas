@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Disciplina {
@@ -12,7 +11,6 @@ public class Disciplina {
     private String codigo;
     private int creditos;
     private boolean ehObrigatoria;
-    private List<Aluno> alunosMatriculados;
     private String status;
 
     public Disciplina(String nome,
@@ -22,7 +20,6 @@ public class Disciplina {
             this.codigo = codigo;
             this.creditos = creditos;
             this.ehObrigatoria = ehObrigatoria;
-            this.alunosMatriculados = new ArrayList<Aluno>();
             this.status = "ABERTA";
         }
 
@@ -30,7 +27,6 @@ public class Disciplina {
         this.codigo = codigo;
         this.creditos = 0;
         this.ehObrigatoria = false;
-        this.alunosMatriculados = new ArrayList<Aluno>();
         this.status = "ABERTA";
     }
 

@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -30,7 +32,7 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
     @Override
     public void cadastrar() {
         super.cadastrar(); // Chama o método cadastrar da classe Usuario para cadastrar no usuarios.csv
-        try (FileWriter writer = new FileWriter("LDS-Sistema-de-matriculas\\code\\ldsMaatriculas\\src\\csv\\alunos.csv", true)) {
+        try (FileWriter writer = new FileWriter("code\\ldsMaatriculas\\src\\csv\\alunos.csv", true)) {
             writer.append("\n")
                   .append(String.valueOf(id)).append(",")
                   .append(matricula).append(",")
@@ -45,7 +47,25 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
 
     @Override
     public void setDados(){
-        return;
+        try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\alunos.csv"))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                if (linha.trim().isEmpty()) {
+                    continue; // Ignora linhas vazias
+                }
+                String[] dados = linha.split(",");
+                String idCsv = dados[0];
+
+                if (idCsv.equals(String.valueOf(this.getId()))){
+                    this.matricula = dados[1];
+                    // this.curso = dados[2];
+                    
+                    return;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
     @Override
