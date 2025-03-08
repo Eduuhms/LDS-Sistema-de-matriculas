@@ -1,5 +1,5 @@
 public interface ResponsavelMatricula {
 
-    public void cancelarMatricula(Disciplina disciplina, Aluno aluno);
+    public void cancelarMatricula(String matriculaAluno, String codigoDisciplina);
 
 }
