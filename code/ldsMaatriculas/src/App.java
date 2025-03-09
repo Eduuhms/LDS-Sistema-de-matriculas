@@ -145,7 +145,6 @@ public class App {
     // Função de teste
     private static void cadastrarProfessor(Scanner scanner) {
         String[] dados = lerDadosUsuario(scanner);
-        List<String> palavras = new ArrayList<>();
         String codigo;
         System.out.println("Quantidade disciplinas: ");
         List<Disciplina> disciplinas = new ArrayList<>();

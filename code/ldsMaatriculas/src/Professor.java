@@ -82,7 +82,7 @@ public class Professor extends Usuario {
                     for (String codigoDisciplina : codigosDisciplinas){
                         Disciplina disciplina = new Disciplina(codigoDisciplina);
                         try {
-                            disciplina.preencherComDadosCsv();
+                            disciplina.preencherComDadosCsv(true);
                             disciplinas.add(disciplina);
                             
                         } catch (Exception e) {

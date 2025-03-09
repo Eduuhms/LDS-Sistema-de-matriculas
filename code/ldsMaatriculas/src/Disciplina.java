@@ -13,6 +13,7 @@ public class Disciplina {
     private int creditos;
     private boolean ehObrigatoria;
     private String status;
+    private List<Aluno> alunos;
 
     public Disciplina(String nome,
         String codigo,
@@ -23,6 +24,7 @@ public class Disciplina {
             this.creditos = creditos;
             this.ehObrigatoria = ehObrigatoria;
             this.status = status;
+            this.alunos = new ArrayList<>();
         }
 
     public Disciplina(String nome,
@@ -33,6 +35,7 @@ public class Disciplina {
             this.creditos = creditos;
             this.ehObrigatoria = ehObrigatoria;
             this.status = "ABERTA";
+            this.alunos = new ArrayList<>();
         }
 
     public Disciplina(String codigo){
@@ -41,11 +44,13 @@ public class Disciplina {
         this.creditos = 0;
         this.ehObrigatoria = false;
         this.status = "ABERTA";
+        this.alunos = new ArrayList<>();
     }
 
     public Disciplina(String codigo, String nome){
         this.codigo = codigo;
         this.nome = nome;
+        this.alunos = new ArrayList<>();
     }
 
     public String statusDisciplina() { return ""; }
@@ -55,38 +60,15 @@ public class Disciplina {
     public void removerAluno(Aluno aluno) {}
 
     public List<Aluno> alunosMatriculados() {
-        List<Aluno> alunos = new ArrayList<>();
-        Aluno aluno;
-        List<String> linhas = LeituraCsv.lerCsv("code\\ldsMaatriculas\\src\\csv\\alunos.csv");
-        
-        for (String linha : linhas){
-            String[] dados = linha.split(",");
-            if (this.ehObrigatoria){
-                for (String codigoDisciplina : dados[4].split(";")){
-                    if (codigoDisciplina.equalsIgnoreCase(this.codigo)){
-                        aluno = new Aluno(dados[1], dados[2]);
-                        alunos.add(aluno);
-                        break;
-                    }
-                    
-                }
-            }
-            else {
-                for (String codigoDisciplina : dados[5].split(";")){
-                    if (codigoDisciplina.equalsIgnoreCase(this.codigo)){
-                        aluno = new Aluno(dados[1], dados[2]);
-                        alunos.add(aluno);
-                        break;
-                    }
-                }
-            }
-        }
-
         return alunos;
     }
     public void cancelarDisciplina() {}
 
     public void preencherComDadosCsv() throws Exception{
+        preencherComDadosCsv(false);
+    }
+
+    public void preencherComDadosCsv(Boolean classes) throws Exception{
         try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv"))) {
             String linha;
             boolean primeiraLinha = true; // Flag para identificar a primeira linha
@@ -107,6 +89,17 @@ public class Disciplina {
                     this.creditos = Integer.parseInt(dados[2]);
                     this.ehObrigatoria = Boolean.parseBoolean(dados[3]);
                     this.status = dados[4];
+
+                    if (classes){
+                        String stringAlunos = dados[5];
+                        String[] codigosAlunos = stringAlunos.split(";");
+                        for (String codigoAluno : codigosAlunos){
+                            Aluno aluno = new Aluno(codigoAluno, "");
+                            aluno.setDados();
+                            alunos.add(aluno);
+
+                        }
+                    }
                     return;
                 }
                 

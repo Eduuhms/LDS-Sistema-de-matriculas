@@ -41,6 +41,10 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
         this.matricula = matricula;
     }
 
+    public String getMatricula(){
+        return this.matricula;
+    }
+
     public Aluno(String matricula, String nome, Curso curso, List<Disciplina> disciplinasObrigatorias,
      List<Disciplina> disciplinasOptativas){
         super();
@@ -85,10 +89,12 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
                 }
                 String[] dados = linha.split(",");
                 String idCsv = dados[0];
+                String matriculaCsv = dados[1];
 
-                if (idCsv.equals(String.valueOf(this.getId()))){
+                if (idCsv.equals(String.valueOf(this.getId())) || matriculaCsv.equals(String.valueOf(this.getMatricula()))){
+                    this.id = Integer.parseInt(dados[0]);
                     this.matricula = dados[1];
-                    // this.curso = dados[2];
+                    this.nome = dados[2];
                     
                     return;
                 }
@@ -101,7 +107,7 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
     @Override
     public String toString(){
 
-        return this.nome + ", " + this.matricula;
+        return "Nome: " + this.nome + "- Matrícula: " + this.matricula;
     }
     
     @Override
