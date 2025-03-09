@@ -364,6 +364,7 @@ public class App {
     private static void manipularCursos(Scanner scanner) {
         System.out.println("1 - Cadastrar curso");
         System.out.println("2 - Listar cursos");
+        System.out.println("3 - Incluir disciplina em um curso");
         System.out.print("Escolha uma opção: ");
         int opcao = scanner.nextInt();
 
@@ -373,6 +374,40 @@ public class App {
                 break;
             case 2:
                 listarCursos();
+                break;
+            case 3:
+            try {
+                List<Curso> cursosDisponiveis = Curso.carregarCursos();
+                System.out.println("Cursos existentes: ");
+                int numeroCurso = 0;
+                for (Curso cursoDisponivel : cursosDisponiveis){
+                    System.out.println(numeroCurso  + " - " + cursoDisponivel.getNome());
+                    numeroCurso ++;
+                }
+
+                System.out.println("Digite o número do curso: ");
+                numeroCurso = scanner.nextInt();
+                Curso cursoEscolhido = cursosDisponiveis.get(numeroCurso);
+                cursoEscolhido.setDados(true);
+                System.out.println("Disciplinas existentes: ");
+                List<Disciplina> disciplinasDisponiveis = Disciplina.carregarDisciplinas();
+                int numeroDisciplina = 0;
+                for (Disciplina disciplinaDisponivel : disciplinasDisponiveis){
+                    System.out.println(numeroDisciplina  + " - " + disciplinaDisponivel.getNome());
+                    numeroDisciplina ++;
+                }
+                System.out.println("Digite o número da disciplina ");
+                numeroDisciplina = scanner.nextInt();
+                Disciplina disciplinaEscolhida = disciplinasDisponiveis.get(numeroDisciplina);
+                disciplinaEscolhida.preencherComDadosCsv();
+                cursoEscolhido.adicionarDisciplina(disciplinaEscolhida);
+                System.out.println("Disciplina cadastrada no curso com sucesso!");
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+                
+
                 break;
             default:
                 System.out.println("Opção inválida.");
