@@ -110,7 +110,7 @@ public class Secretaria extends Usuario implements ResponsavelMatricula {
     
         System.out.println("Matrícula cancelada: Aluno " + matriculaAluno + ", Disciplina " + codigoDisciplina);
     }
-    
+
     @Override
     public void cadastrar() {
         super.cadastrar(); // Chama o método cadastrar da classe Usuario para cadastrar no usuarios.csv
@@ -124,125 +124,123 @@ public class Secretaria extends Usuario implements ResponsavelMatricula {
     }
 
 public void gerarCurriculo(String matricula) {
-        Map<String, String> alunos = new HashMap<>();
-        Map<String, String> usuarios = new HashMap<>();
-        Map<String, String> cursos = new HashMap<>();
-        Map<String, List<String>> matriculas = new HashMap<>();
-        Map<String, String> disciplinas = new HashMap<>();
+    Map<String, String> alunos = new HashMap<>();
+    Map<String, String> usuarios = new HashMap<>();
+    Map<String, String> cursos = new HashMap<>();
+    Map<String, String> disciplinas = new HashMap<>();
 
-        // Ler o arquivo alunos.csv
-        try (BufferedReader br = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\alunos.csv"))) {
-            String linha;
-            br.readLine(); // Pular o cabeçalho
-            while ((linha = br.readLine()) != null) {
-                String[] dados = linha.split(",");
-                if (dados.length >= 3) {
-                    alunos.put(dados[1], dados[0] + "," + dados[3]); // matricula -> id,curso_id
-                }
+    // Ler o arquivo alunos.csv
+    try (BufferedReader br = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\alunos.csv"))) {
+        String linha;
+        br.readLine(); // Pular o cabeçalho
+        while ((linha = br.readLine()) != null) {
+            String[] dados = linha.split(",");
+            if (dados.length >= 6) { // Verifica se há pelo menos 6 colunas
+                alunos.put(dados[1], dados[0] + "," + dados[3] + "," + dados[4] + "," + dados[5]); // matricula -> id,curso_id,disciplinas_obrigatorias,disciplinas_optativas
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
 
-        // Ler o arquivo usuarios.csv
-        try (BufferedReader br = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\usuarios.csv"))) {
-            String linha;
-            br.readLine(); // Pular o cabeçalho
-            while ((linha = br.readLine()) != null) {
-                String[] dados = linha.split(",");
-                if (dados.length >= 2) {
-                    usuarios.put(dados[0], dados[1]); // id -> nome
-                }
+    // Ler o arquivo usuarios.csv
+    try (BufferedReader br = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\usuarios.csv"))) {
+        String linha;
+        br.readLine(); // Pular o cabeçalho
+        while ((linha = br.readLine()) != null) {
+            String[] dados = linha.split(",");
+            if (dados.length >= 2) {
+                usuarios.put(dados[0], dados[1]); // id -> nome
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
 
-        // Ler o arquivo curso.csv
-        try (BufferedReader br = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\cursos.csv"))) {
-            String linha;
-            br.readLine(); // Pular o cabeçalho
-            while ((linha = br.readLine()) != null) {
-                String[] dados = linha.split(",");
-                if (dados.length >= 2) {
-                    cursos.put(dados[0], dados[1]); // idCurso -> nome
-                }
+    // Ler o arquivo curso.csv
+    try (BufferedReader br = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\cursos.csv"))) {
+        String linha;
+        br.readLine(); // Pular o cabeçalho
+        while ((linha = br.readLine()) != null) {
+            String[] dados = linha.split(",");
+            if (dados.length >= 2) {
+                cursos.put(dados[0], dados[1]); // idCurso -> nome
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
 
-        // Ler o arquivo matriculas.csv
-        try (BufferedReader br = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\matriculas.csv"))) {
-            String linha;
-            br.readLine(); // Pular o cabeçalho
-            while ((linha = br.readLine()) != null) {
-                String[] dados = linha.split(",");
-                if (dados.length >= 2) {
-                    String alunoId = dados[0];
-                    String disciplinaCodigo = dados[1];
-                    matriculas.computeIfAbsent(alunoId, k -> new ArrayList<>()).add(disciplinaCodigo);
-                }
+    // Ler o arquivo disciplinas.csv
+    try (BufferedReader br = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv"))) {
+        String linha;
+        br.readLine(); // Pular o cabeçalho
+        while ((linha = br.readLine()) != null) {
+            String[] dados = linha.split(",");
+            if (dados.length >= 2) {
+                disciplinas.put(dados[1], dados[0]); // codigo -> nome
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
 
-        // Ler o arquivo disciplinas.csv
-        try (BufferedReader br = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv"))) {
-            String linha;
-            br.readLine(); // Pular o cabeçalho
-            while ((linha = br.readLine()) != null) {
-                String[] dados = linha.split(",");
-                if (dados.length >= 2) {
-                    disciplinas.put(dados[1], dados[0]); // codigo -> nome
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    // Encontrar o id, curso_id, disciplinas_obrigatorias e disciplinas_optativas do aluno com base na matrícula
+    String alunoInfo = alunos.get(matricula);
+    if (alunoInfo == null) {
+        System.out.println("Aluno não encontrado.");
+        return;
+    }
+    String[] alunoDados = alunoInfo.split(",");
+    String alunoId = alunoDados[0];
+    String cursoId = alunoDados[1];
+    String disciplinasObrigatorias = alunoDados[2];
+    String disciplinasOptativas = alunoDados[3];
 
-        // Encontrar o id e curso_id do aluno com base na matrícula
-        String alunoInfo = alunos.get(matricula);
-        if (alunoInfo == null) {
-            System.out.println("Aluno não encontrado.");
-            return;
-        }
-        String[] alunoDados = alunoInfo.split(",");
-        String alunoId = alunoDados[0];
-        String cursoId = alunoDados[1];
+    // Encontrar o nome do aluno
+    String nomeAluno = usuarios.get(alunoId);
+    if (nomeAluno == null) {
+        System.out.println("Nome do aluno não encontrado.");
+        return;
+    }
 
-        // Encontrar o nome do aluno
-        String nomeAluno = usuarios.get(alunoId);
-        if (nomeAluno == null) {
-            System.out.println("Nome do aluno não encontrado.");
-            return;
-        }
+    // Encontrar o nome do curso
+    String nomeCurso = cursos.get(cursoId);
+    if (nomeCurso == null) {
+        System.out.println("Curso não encontrado.");
+        return;
+    }
 
-        // Encontrar o nome do curso
-        String nomeCurso = cursos.get(cursoId);
-        if (nomeCurso == null) {
-            System.out.println("Curso não encontrado.");
-            return;
-        }
-
-        // Encontrar as disciplinas matriculadas
-        List<String> disciplinasDoAluno = matriculas.get(alunoId);
-        List<String> nomesDisciplinas = new ArrayList<>();
-        if (disciplinasDoAluno != null) {
-            for (String codigoDisciplina : disciplinasDoAluno) {
-                String nomeDisciplina = disciplinas.get(codigoDisciplina);
+    // Encontrar as disciplinas matriculadas (obrigatórias e optativas)
+    List<String> nomesDisciplinas = new ArrayList<>();
+    if (!disciplinasObrigatorias.isEmpty() && !disciplinasObrigatorias.equals("null")) {
+        String[] codigosObrigatorias = disciplinasObrigatorias.split(";");
+        for (String codigo : codigosObrigatorias) {
+            if (!codigo.isEmpty()) {
+                String nomeDisciplina = disciplinas.get(codigo);
                 if (nomeDisciplina != null) {
                     nomesDisciplinas.add(nomeDisciplina);
                 }
             }
         }
-
-        // Exibir o currículo
-        System.out.println("Nome do Aluno: " + nomeAluno);
-        System.out.println("Curso: " + nomeCurso);
-        System.out.println("Disciplinas Matriculadas: " + String.join(", ", nomesDisciplinas));
     }
+    if (!disciplinasOptativas.isEmpty() && !disciplinasOptativas.equals("null")) {
+        String[] codigosOptativas = disciplinasOptativas.split(";");
+        for (String codigo : codigosOptativas) {
+            if (!codigo.isEmpty()) {
+                String nomeDisciplina = disciplinas.get(codigo);
+                if (nomeDisciplina != null) {
+                    nomesDisciplinas.add(nomeDisciplina);
+                }
+            }
+        }
+    }
+
+    // Exibir o currículo
+    System.out.println("Nome do Aluno: " + nomeAluno);
+    System.out.println("Curso: " + nomeCurso);
+    System.out.println("Disciplinas Matriculadas: " + String.join(", ", nomesDisciplinas));
+}
 
 
     public void attInformacoesAluno() {
