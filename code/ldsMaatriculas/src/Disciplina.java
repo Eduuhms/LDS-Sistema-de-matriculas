@@ -114,6 +114,10 @@ public class Disciplina {
         return nome;
     }
 
+    public Boolean getEhObrigatoria() {
+        return ehObrigatoria;
+    }
+
     public String getCodigo(){
         return codigo;
     }

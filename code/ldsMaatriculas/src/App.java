@@ -83,7 +83,7 @@ public class App {
         String senha = scanner.next();
         Usuario usuario = Usuario.entrar(email, senha);
         if (usuario != null) {
-            usuario.setDados();
+            usuario.setDados(true);
             System.out.println("Bem Vindo, " + usuario.getNome());
 
             switch(usuario.getTipo()){

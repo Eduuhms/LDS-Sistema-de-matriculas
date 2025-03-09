@@ -38,6 +38,8 @@ public abstract class Usuario {
 
     public abstract void setDados();
 
+    public abstract void setDados(Boolean classes);
+
     private static int encontrarUltimoId() {
         int ultimoId = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\usuarios.csv"))) {
@@ -91,7 +93,7 @@ public abstract class Usuario {
 
                     switch (tipo) {
                         case ALUNO:
-                            return new Aluno(nome, email, senha, "", null);
+                            return new Aluno(nome, email, senha, Integer.parseInt(id));
                         case PROFESSOR:
                             return new Professor(nome, email, senha, id);
                         case SECRETARIA:

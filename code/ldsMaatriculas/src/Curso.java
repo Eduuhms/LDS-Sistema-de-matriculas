@@ -13,6 +13,13 @@ public class Curso {
     private int creditos;
     private List<Disciplina> disciplinas;
 
+    public Curso(int idcurso) {
+        this.idCurso = idcurso++;
+        this.nome = null;
+        this.creditos = 0;
+        this.disciplinas = new ArrayList<>();
+    }
+    
     // Construtor sem idCurso (gerado automaticamente)
     public Curso(String nome, int creditos) {
         this.idCurso = proximoId++; // Gera o próximo ID
@@ -79,6 +86,44 @@ public class Curso {
         return cursos;
     }
 
+    public void setDados(Boolean classes){
+        try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\cursos.csv"))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                if (linha.trim().isEmpty()) {
+                    continue; // Ignora linhas vazias
+                }
+                String[] dados = linha.split(",");
+                String idCsv = dados[0];
+
+                if (idCsv.equals(String.valueOf(this.idCurso))){
+                    this.nome = dados[1];
+                    this.creditos = Integer.parseInt(dados[2]);
+
+                    if (classes){
+                        String stringDisciplinas = dados[3];
+                        String[] codigosDisciplinas = stringDisciplinas.split(";");
+                        
+                        for (String codigoDisciplina : codigosDisciplinas){
+                            Disciplina disciplina = new Disciplina(codigoDisciplina);
+                            try {
+                                disciplina.preencherComDadosCsv(true);
+                                disciplinas.add(disciplina);
+                                
+                            } catch (Exception e) {
+                                System.out.println(e);
+                            }
+                        }  
+                    }
+                    
+                    return;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void adicionarDisciplina(Disciplina disciplina) {
         if (disciplina != null) {
             disciplinas.add(disciplina);
@@ -87,6 +132,8 @@ public class Curso {
             System.out.println("Erro: Disciplina inválida.");
         }
     }
+
+
 
     public int getIdCurso() {
         return idCurso;

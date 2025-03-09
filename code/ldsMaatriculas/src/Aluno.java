@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Aluno extends Usuario implements ResponsavelMatricula {
@@ -39,6 +40,15 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
         super();
         this.nome = nome;
         this.matricula = matricula;
+    }
+
+    public Aluno(String nome, String email, String senha, int id){
+        super(nome, email, senha, TipoUsuario.ALUNO, id);
+        this.nome = null;
+        this.matricula = null;
+        this.curso = null;
+        this.disciplinasObrigatorias = new ArrayList<>();
+        this.disciplinasOptativas = new ArrayList<>();
     }
 
     public String getMatricula(){
@@ -81,6 +91,11 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
 
     @Override
     public void setDados(){
+        setDados(false);
+    }
+
+    @Override
+    public void setDados(Boolean classes){
         try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\alunos.csv"))) {
             String linha;
             while ((linha = reader.readLine()) != null) {
@@ -95,6 +110,34 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
                     this.id = Integer.parseInt(dados[0]);
                     this.matricula = dados[1];
                     this.nome = dados[2];
+
+                    if (classes){
+                        String idCursoCsv = dados[3];
+                        if (idCursoCsv != null){
+                            this.curso = new Curso(Integer.parseInt(idCursoCsv));
+                            curso.setDados(true);
+                            
+                            List<Disciplina> disciplinasCurso = curso.getDisciplinas();
+                            String idsDisciplinas = "";
+                            idsDisciplinas = !"null".equals(dados[4]) ? idsDisciplinas + dados[4] : "";
+                            idsDisciplinas = !"null".equals(dados[5]) ? idsDisciplinas + dados[5] : idsDisciplinas;
+                            
+                                for (String idDisciplina : idsDisciplinas.split(";")){
+                                    for (Disciplina disciplinaCurso : disciplinasCurso){
+                                        if (idDisciplina.equalsIgnoreCase(String.valueOf(disciplinaCurso.getCodigo()))){
+                                            if (disciplinaCurso.getEhObrigatoria()){
+                                                this.disciplinasObrigatorias.add(disciplinaCurso);
+                                            } else {
+                                                this.disciplinasOptativas.add(disciplinaCurso);
+                                            }
+                                            break;
+                                        }
+                                }
+                            }
+                            
+                            
+                        }
+                    }
                     
                     return;
                 }

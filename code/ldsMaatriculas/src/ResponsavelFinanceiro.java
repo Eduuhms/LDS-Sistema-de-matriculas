@@ -33,4 +33,9 @@ public class ResponsavelFinanceiro extends Usuario {
     public void setDados(){
         return;
     }
+
+    @Override
+    public void setDados(Boolean classes){
+        return;
+    }
 }
