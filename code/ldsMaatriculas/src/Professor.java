@@ -49,7 +49,7 @@ public class Professor extends Usuario {
     public List<Aluno> visualizarAlunos(Disciplina disciplina) {
         Disciplina disciplinaProcurada = procurarDisciplina(disciplina);
         if (disciplinaProcurada != null){
-            List<Aluno> alunos = disciplina.alunosMatriculados();
+            List<Aluno> alunos = disciplinaProcurada.alunosMatriculados();
             return alunos;
         }
         return null;

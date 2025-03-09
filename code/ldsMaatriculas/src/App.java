@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -51,33 +54,27 @@ public class App {
         scanner.close();
     }
 
-    // private static void lerDisciplinasCsv(){
-    //     try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\usuarios.csv"))) {
-    //         String linha;
-    //         boolean primeiraLinha = true; // Flag para identificar a primeira linha
-    //         while ((linha = reader.readLine()) != null) {
-    //             if (primeiraLinha) {
-    //                 primeiraLinha = false; // Pula a primeira linha
-    //                 continue;
-    //             }
-    //             if (linha.trim().isEmpty()) {
-    //                 continue; // Ignora linhas vazias
-    //             }
-    //             String[] dados = linha.split(",");
-    //             String nome, codigo, status;
-    //             int creditos;
-    //             boolean ehObrigatoria;
+    private static List<String> lerCsv(String caminhoCsv){
+        List<String> linhas = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(caminhoCsv))) {
+            String linha;
+            boolean primeiraLinha = true; // Flag para identificar a primeira linha
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false; // Pula a primeira linha
+                    continue;
+                }
+                if (linha.trim().isEmpty()) {
+                    continue; // Ignora linhas vazias
+                }
+                linhas.add(linha);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-    //             nome = dados[0];
-    //             codigo = dados[1];
-    //             creditos = Integer.parseInt(dados[2]);
-    //             ehObrigatoria = Boolean.parseBoolean(dados[3]);
-    //             Disciplina disciplina = new Disciplina(nome, codigo, creditos, ehObrigatoria);
-    //         }
-    //     } catch (IOException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
+        return linhas;
+    }
 
     private static void Login(Scanner scanner) {
         System.out.println("Email:");
@@ -88,11 +85,50 @@ public class App {
         if (usuario != null) {
             usuario.setDados();
             System.out.println("Bem Vindo, " + usuario.getNome());
+
+            switch(usuario.getTipo()){
+                case PROFESSOR:
+                    Professor professor = (Professor) usuario;
+                    funcoesProfessor(professor, scanner);
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
             
         } else {
             System.out.println("Email ou senha incorretos.");
         }
     }
+
+    private static void funcoesProfessor(Professor professor, Scanner scanner){
+        int opcao = 0;
+        do { 
+            System.out.println("1 - Pesquisar alunos de uma disciplina");
+            System.out.println("0 - Sair");
+            opcao = scanner.nextInt();
+            
+            switch(opcao) {
+                case 1:
+                    System.out.println("Digite o nome da disciplina:");
+                    String nomeDisciplina;
+                    nomeDisciplina = scanner.nextLine();
+                    nomeDisciplina = scanner.nextLine();
+                    Disciplina disciplinaComparacao = new Disciplina("0", nomeDisciplina);
+                    List<Aluno> alunos = professor.visualizarAlunos(disciplinaComparacao);
+                    System.out.println(alunos);
+                    break;
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+            
+        } while (opcao != 0);
+    }
+
+
+
 
     private static void cadastrarAluno(Scanner scanner) {
         String[] dados = lerDadosUsuario(scanner);
