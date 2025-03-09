@@ -1,12 +1,21 @@
 ```code
 
+
 @startuml
+
+enum TIPOUSUARIO {
+    ALUNO
+    PROFESSOR
+    RESPOSAVELFINANCEIRO
+    SECRETARIA
+}
 
 class Usuario {
   - id: int
   - nome: String
   - email: String
   - senha: String
+  - tipo: TipoUsuario
   + cadastrar()
   + entrar()
   + sair()
@@ -17,8 +26,8 @@ class Aluno{
   - curso: Curso
   - disciplinasObrigatorias: List<Disciplina>
   - disciplinasOptativas: List<Disciplina>
-  - maxObrigatorias: const = 4
-  - maxOptativas: const = 2
+  - MAX_OBRIGATORIAS: const = 4
+  - MAX_OPTATIVAS: const = 2
   + confirmarMatricula(): void
   + cancelarMatricula(disciplina: Disciplina): void
   + matricularDisciplina(disciplina: Disciplina): void
@@ -31,6 +40,7 @@ class Curso {
   - creditos: int
   - disciplinas: List<Disciplina>
   + adicionarDisciplina(disciplina: Disciplina): void
+  + salvarRelacaoDisciplina(String: codigoDisciplina): void
 }
 
 class Disciplina {
@@ -52,21 +62,18 @@ class Disciplina {
 }
 
 class Cobranca {
-  - id: int
-  - aluno: Aluno
-  - valor: float
   + calcularValorTotal(): float
 }
 
 class ResponsavelFinanceiro{
   - disciplinasCobradas: List<Disciplina>
-  + gerarCobranca(): boolean
-  + notificarCobranca(): void
+  + gerarCobranca(): void
 }
 
 class Professor{
   - disciplinas: List<Disciplina>
   + visualizarAlunos(disciplina: Disciplina): List<Aluno>
+  + procurarDisciplina(Disciplina: Disciplina): disciplinaProcurada
 }
 
 class Secretaria {
@@ -76,7 +83,8 @@ class Secretaria {
   + attInformacoesProfessor(): void
   
 }
-class ResponsavelMatricula{
+
+interface ResponsavelMatricula{
 cancelarMatricula(disciplina: Disciplina, aluno:Aluno): void
 }
 
