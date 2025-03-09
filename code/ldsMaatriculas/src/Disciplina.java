@@ -213,10 +213,37 @@ public class Disciplina {
         if (alunosMatriculados.remove(aluno)) {
             System.out.println("Aluno " + aluno.getNome() + " removido da disciplina " + this.nome);
             statusDisciplina(); 
+            atualizarRegistroCsv();
             return;
         } 
 
         throw new Exception ("Aluno não encontrado na disciplina.");
+    }
+
+    public static List<Disciplina> carregarDisciplinas() {
+        List<Disciplina> disciplinas = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv"))) {
+            String linha;
+            boolean primeiraLinha = true; // Pula o cabeçalho
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false;
+                    continue;
+                }
+                String[] dados = linha.split(",");
+                String nome = dados[0];
+                String codigoDisciplina = dados[1];
+                int creditos = Integer.parseInt(dados[2]);
+                boolean ehObrigatoria = Boolean.parseBoolean(dados[3]);
+                String status = dados[4];
+
+                disciplinas.add(new Disciplina(nome, codigoDisciplina, creditos, ehObrigatoria, status));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return disciplinas;
     }
 
     public void cancelarDisciplina() {

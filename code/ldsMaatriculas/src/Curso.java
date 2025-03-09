@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -61,7 +62,9 @@ public class Curso {
         try (FileWriter writer = new FileWriter("code\\ldsMaatriculas\\src\\csv\\cursos.csv", true)) {
             writer.append(String.valueOf(idCurso)).append(",")
                   .append(nome).append(",")
-                  .append(String.valueOf(creditos)).append("\n");
+                  .append(String.valueOf(creditos)).append(",")
+                  .append(null).append("\n");
+
             System.out.println("Curso salvo com sucesso no arquivo cursos.csv.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -128,15 +131,21 @@ public class Curso {
         }
     }
 
-    public void adicionarDisciplina(Disciplina disciplina) {
+    public void adicionarDisciplina(Disciplina disciplina) throws Exception{
         if (disciplina != null) {
+            if (!disciplinas.isEmpty()){
+                for (Disciplina disciplinaCadastrada : disciplinas){
+                    if (disciplinaCadastrada.equals(disciplina)){
+                        throw new Exception("Disciplina já cadastrada no curso!");
+                    }
+                }
+            }
             disciplinas.add(disciplina);
-            System.out.println("Disciplina " + disciplina.getNome() + " adicionada ao curso " + this.nome);
-    
-            salvarRelacaoDisciplina(disciplina.getCodigo());
-        } else {
-            System.out.println("Erro: Disciplina inválida.");
-        }
+            atualizarRegistroCsv();
+            // salvarRelacaoDisciplina(disciplina.getCodigo());
+            return;
+        } 
+        throw new Exception("Erro: Disciplina inválida.");
     }
     
     private void salvarRelacaoDisciplina(String codigoDisciplina) {
@@ -185,6 +194,56 @@ public class Curso {
             e.printStackTrace();
         }
         return disciplinasDoCurso;
+    }
+
+    public void atualizarRegistroCsv(){
+        String arquivoCSV = "code\\ldsMaatriculas\\src\\csv\\cursos.csv";
+        List<String> linhas = new ArrayList<>();
+        boolean encontrada = false;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(arquivoCSV))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                String[] dados = linha.split(",");
+                if (dados.length > 1 && dados[0].equals(String.valueOf(this.idCurso))) {
+                    String stringDisciplinas = "";
+                    for (Disciplina disciplinaCadastrada : this.disciplinas){
+                        stringDisciplinas += disciplinaCadastrada.getCodigo();
+                        stringDisciplinas += ";";
+                    }
+
+                    stringDisciplinas = stringDisciplinas.equals("") ? null : stringDisciplinas;
+
+                    StringBuilder novaLinha = new StringBuilder();
+                    novaLinha.append(this.idCurso).append(",")
+                             .append(this.nome).append(",")
+                             .append(this.creditos).append(",")
+                             .append(stringDisciplinas).append("");
+
+                    linhas.add(novaLinha.toString());
+                    encontrada = true;
+                } else {
+                    linhas.add(linha);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        if (!encontrada) {
+            System.out.println("Erro: Curso com id " + this.idCurso + " não encontrada!");
+            return;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoCSV))) {
+            for (String linha : linhas) {
+                writer.write(linha);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getIdCurso() {
