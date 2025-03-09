@@ -13,7 +13,6 @@ public class Curso {
     private int creditos;
     private List<Disciplina> disciplinas;
 
-    // Construtor sem idCurso (gerado automaticamente)
     public Curso(String nome, int creditos) {
         this.idCurso = proximoId++; // Gera o próximo ID
         this.nome = nome;
@@ -21,12 +20,11 @@ public class Curso {
         this.disciplinas = new ArrayList<>();
     }
 
-    // Método para encontrar o último ID no arquivo CSV
     private static int encontrarUltimoId() {
         int ultimoId = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\cursos.csv"))) {
             String linha;
-            boolean primeiraLinha = true; // Pula o cabeçalho
+            boolean primeiraLinha = true; 
             while ((linha = reader.readLine()) != null) {
                 if (primeiraLinha) {
                     primeiraLinha = false;
@@ -44,7 +42,6 @@ public class Curso {
         return ultimoId;
     }
 
-    // Método para salvar o curso no arquivo CSV
     public void salvarCurso() {
         try (FileWriter writer = new FileWriter("code\\ldsMaatriculas\\src\\csv\\cursos.csv", true)) {
             writer.append(String.valueOf(idCurso)).append(",")
@@ -56,7 +53,6 @@ public class Curso {
         }
     }
 
-    // Método estático para carregar cursos do arquivo CSV
     public static List<Curso> carregarCursos() {
         List<Curso> cursos = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\cursos.csv"))) {
@@ -83,9 +79,58 @@ public class Curso {
         if (disciplina != null) {
             disciplinas.add(disciplina);
             System.out.println("Disciplina " + disciplina.getNome() + " adicionada ao curso " + this.nome);
+    
+            salvarRelacaoDisciplina(disciplina.getCodigo());
         } else {
             System.out.println("Erro: Disciplina inválida.");
         }
+    }
+    
+    private void salvarRelacaoDisciplina(String codigoDisciplina) {
+        try (FileWriter writer = new FileWriter("code\\ldsMaatriculas\\src\\csv\\DisciplinasCurso.csv", true)) {
+            if (new java.io.File("code\\ldsMaatriculas\\src\\csv\\DisciplinasCurso.csv").length() == 0) {
+                writer.append("idCurso,codigoDisciplina\n");
+            }
+            writer.append(String.valueOf(this.idCurso)).append(",")
+                  .append(codigoDisciplina).append("\n");
+            System.out.println("Relação curso-disciplina salva com sucesso no arquivo CursoDisciplina.csv.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Disciplina> carregarDisciplinasDoCurso() {
+        List<Disciplina> disciplinasDoCurso = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\DisciplinasCurso.csv"))) {
+            String linha;
+            boolean primeiraLinha = true; // Pula o cabeçalho
+            while ((linha = reader.readLine()) != null) {
+                if (primeiraLinha) {
+                    primeiraLinha = false;
+                    continue;
+                }
+                if (linha.trim().isEmpty()) {
+                    continue; 
+                }
+    
+                String[] dados = linha.split(",");
+                int idCurso = Integer.parseInt(dados[0]);
+                String codigoDisciplina = dados[1];
+    
+                if (idCurso == this.idCurso) {
+                    Disciplina disciplina = new Disciplina(codigoDisciplina);
+                    try {
+                        disciplina.preencherComDadosCsv();
+                        disciplinasDoCurso.add(disciplina);
+                    } catch (Exception e) {
+                        System.err.println("Erro ao carregar disciplina: " + e.getMessage());
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return disciplinasDoCurso;
     }
 
     public int getIdCurso() {

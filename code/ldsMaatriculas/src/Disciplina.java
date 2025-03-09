@@ -33,7 +33,6 @@ public class Disciplina {
         this.status = "ABERTA";
     }
 
-    // Método para salvar a disciplina no arquivo CSV
     public void salvarDisciplina() {
         try (FileWriter writer = new FileWriter("code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv", true)) {
             if (new java.io.File("code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv").length() == 0) {
@@ -52,14 +51,14 @@ public class Disciplina {
     public void preencherComDadosCsv() throws Exception {
         try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv"))) {
             String linha;
-            boolean primeiraLinha = true; // Flag para identificar a primeira linha
+            boolean primeiraLinha = true; 
             while ((linha = reader.readLine()) != null) {
                 if (primeiraLinha) {
-                    primeiraLinha = false; // Pula a primeira linha
+                    primeiraLinha = false; 
                     continue;
                 }
                 if (linha.trim().isEmpty()) {
-                    continue; // Ignora linhas vazias
+                    continue; 
                 }
 
                 String[] dados = linha.split(",");
@@ -78,54 +77,48 @@ public class Disciplina {
         }
     }
 
-    // Método para atualizar o status da disciplina com base no número de alunos
     public String statusDisciplina() {
         int totalAlunos = alunosMatriculados.size();
 
         if (totalAlunos < minAlunos) {
-            status = "INATIVA"; // Menos de 3 alunos
+            status = "INATIVA"; 
         } else if (totalAlunos >= minAlunos && totalAlunos < maxAlunos) {
-            status = "ABERTA"; // De 3 a 59 alunos
+            status = "ABERTA"; 
         } else if (totalAlunos == maxAlunos) {
-            status = "FECHADA"; // 60 alunos (máximo)
+            status = "FECHADA";
         }
 
         return status;
     }
 
-    // Método para adicionar um aluno à disciplina
-    public void addAluno(Aluno aluno) {
-        if (alunosMatriculados.size() < maxAlunos) {
-            alunosMatriculados.add(aluno);
-            System.out.println("Aluno " + aluno.getNome() + " matriculado na disciplina " + this.nome);
-            statusDisciplina(); // Atualiza o status após a matrícula
-        } else {
-            System.out.println("Não foi possível matricular o aluno. A disciplina está cheia.");
-        }
-    }
+    // public void addAluno(Aluno aluno) {
+    //     if (alunosMatriculados.size() < maxAlunos) {
+    //         alunosMatriculados.add(aluno);
+    //         System.out.println("Aluno " + aluno.getNome() + " matriculado na disciplina " + this.nome);
+    //         statusDisciplina(); 
+    //     } else {
+    //         System.out.println("Não foi possível matricular o aluno. A disciplina está cheia.");
+    //     }
+    // }
 
-    // Método para remover um aluno da disciplina
-    public void removerAluno(Aluno aluno) {
-        if (alunosMatriculados.remove(aluno)) {
-            System.out.println("Aluno " + aluno.getNome() + " removido da disciplina " + this.nome);
-            statusDisciplina(); // Atualiza o status após a remoção
-        } else {
-            System.out.println("Aluno não encontrado na disciplina.");
-        }
-    }
+    // public void removerAluno(Aluno aluno) {
+    //     if (alunosMatriculados.remove(aluno)) {
+    //         System.out.println("Aluno " + aluno.getNome() + " removido da disciplina " + this.nome);
+    //         statusDisciplina(); 
+    //     } else {
+    //         System.out.println("Aluno não encontrado na disciplina.");
+    //     }
+    // }
 
-    // Método para listar os alunos matriculados
     public List<Aluno> alunosMatriculados() {
         return alunosMatriculados;
     }
 
-    // Método para cancelar a disciplina (define o status como CANCELADA)
     public void cancelarDisciplina() {
         status = "CANCELADA";
         System.out.println("Disciplina " + this.nome + " cancelada.");
     }
 
-    // Getters
     public String getNome() {
         return nome;
     }
