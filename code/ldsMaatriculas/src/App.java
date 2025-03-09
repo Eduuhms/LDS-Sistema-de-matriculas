@@ -200,6 +200,15 @@ public class App {
                 case ALUNO: 
                     Aluno aluno = (Aluno) usuario;
                     funcoesAluno(aluno, scanner);
+                    break;
+                case SECRETARIA:
+                    Secretaria secretaria = (Secretaria) usuario;
+                    funcoesSecretaria(secretaria, scanner);
+                    break;
+                case RESPOSAVELFINANCEIRO:
+                    ResponsavelFinanceiro responsavel = (ResponsavelFinanceiro) usuario;
+                    funcoesFinanceiro(responsavel, scanner);
+                    break;
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
             }
@@ -321,6 +330,80 @@ public class App {
             
         } while (opcao != 0);
     }
+
+    private static void funcoesSecretaria(Secretaria secretaria, Scanner scanner){
+        int opcao;
+        do { 
+            System.out.println("1 - Cancelar matrícula de um aluno");
+            System.out.println("2 - Gerar currículo de um aluno");
+            System.out.println("3 - Ver informacoes de um aluno");
+            System.out.println("4 - Ver informacoes de um professor");
+            System.out.println("5 - Ver informacoes de uma disciplina");
+            System.out.println("0 - Sair");
+            opcao = scanner.nextInt();
+            
+            switch(opcao) {
+                case 1:
+                System.out.println("Digite a matricula do aluno:");
+                String matricula = scanner.next();
+                System.out.println("Digite o código da disciplina:");
+                String codigoDisciplina = scanner.next();
+                secretaria.cancelarMatricula(matricula, codigoDisciplina);
+                    break;
+                case 2:
+                    System.out.println("Digite a matricula do aluno:");
+                    String matriculaAluno = scanner.next();
+                    secretaria.gerarCurriculo(matriculaAluno);
+                    break;
+                case 3:
+                    System.out.println("Digite a matricula do aluno:");
+                    matriculaAluno = scanner.next();
+                    secretaria.InformacoesAluno(matriculaAluno);
+                    break;
+                case 4:
+                    System.out.println("Digite o nome do professor:");
+                    String nomeProfessor = scanner.next();
+                    secretaria.InformacoesProfessor(nomeProfessor);
+                    break;
+                case 5:
+                System.out.println("Digite o nome da disciplina:");
+                String nomeDisciplina = scanner.next();
+                secretaria.InformacoesDisciplina(nomeDisciplina);
+                    break;
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+            
+        } while (opcao != 0);
+    }
+
+    private static void funcoesFinanceiro(ResponsavelFinanceiro financeiro, Scanner scanner){
+        int opcao;
+        do { 
+            System.out.println("1 - Gerar cobrança para um aluno");
+            System.out.println("0 - Sair");
+            opcao = scanner.nextInt();
+            
+            switch(opcao) {
+                case 1:
+                    System.out.println("Digite a matricula do aluno:");
+                    String matricula = scanner.next();
+                    financeiro.gerarCobranca(matricula);
+                    break;
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+            
+        } while (opcao != 0);
+    }
+
+
 
     private static void cadastrarAluno(Scanner scanner) {
         String[] dados = lerDadosUsuario(scanner);
