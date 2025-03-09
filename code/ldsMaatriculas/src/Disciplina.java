@@ -14,7 +14,7 @@ public class Disciplina {
     private int creditos;
     private boolean ehObrigatoria;
     private String status;
-    private List<Aluno> alunos;
+    private List<Aluno> alunosMatriculados;
 
     public Disciplina(String nome,
         String codigo,
@@ -25,7 +25,7 @@ public class Disciplina {
             this.creditos = creditos;
             this.ehObrigatoria = ehObrigatoria;
             this.status = status;
-            this.alunos = new ArrayList<>();
+            this.alunosMatriculados = new ArrayList<>();
         }
 
     public Disciplina(String nome,
@@ -36,7 +36,7 @@ public class Disciplina {
             this.creditos = creditos;
             this.ehObrigatoria = ehObrigatoria;
             this.status = "ABERTA";
-            this.alunos = new ArrayList<>();
+            this.alunosMatriculados = new ArrayList<>();
         }
 
     public Disciplina(String codigo) {
@@ -45,13 +45,13 @@ public class Disciplina {
         this.creditos = 0;
         this.ehObrigatoria = false;
         this.status = "ABERTA";
-        this.alunos = new ArrayList<>();
+        this.alunosMatriculados = new ArrayList<>();
     }
 
     public Disciplina(String codigo, String nome){
         this.codigo = codigo;
         this.nome = nome;
-        this.alunos = new ArrayList<>();
+        this.alunosMatriculados = new ArrayList<>();
     }
 
     public void salvarDisciplina() {
@@ -68,16 +68,15 @@ public class Disciplina {
             e.printStackTrace();
         }
     }
-    public String statusDisciplina() { return ""; }
+
     public void gerarCurriculo() {}
     public void fecharMatriculas() {}
     public void addAluno(Aluno aluno) {}
     public void removerAluno(Aluno aluno) {}
 
     public List<Aluno> alunosMatriculados() {
-        return alunos;
+        return alunosMatriculados;
     }
-    public void cancelarDisciplina() {}
 
     public void preencherComDadosCsv() throws Exception{
         preencherComDadosCsv(false);
@@ -106,12 +105,12 @@ public class Disciplina {
                     this.status = dados[4];
 
                     if (classes){
-                        String stringAlunos = dados[5];
-                        String[] codigosAlunos = stringAlunos.split(";");
-                        for (String codigoAluno : codigosAlunos){
+                        String stringalunosMatriculados = dados[5];
+                        String[] codigosalunosMatriculados = stringalunosMatriculados.split(";");
+                        for (String codigoAluno : codigosalunosMatriculados){
                             Aluno aluno = new Aluno(codigoAluno, "");
                             aluno.setDados();
-                            alunos.add(aluno);
+                            alunosMatriculados.add(aluno);
 
                         }
                     }
@@ -125,13 +124,13 @@ public class Disciplina {
     }
 
     public String statusDisciplina() {
-        int totalAlunos = alunosMatriculados.size();
+        int totalalunosMatriculados = alunosMatriculados.size();
 
-        if (totalAlunos < minAlunos) {
+        if (totalalunosMatriculados < minAlunos) {
             status = "INATIVA"; 
-        } else if (totalAlunos >= minAlunos && totalAlunos < maxAlunos) {
+        } else if (totalalunosMatriculados >= minAlunos && totalalunosMatriculados < maxAlunos) {
             status = "ABERTA"; 
-        } else if (totalAlunos == maxAlunos) {
+        } else if (totalalunosMatriculados == maxAlunos) {
             status = "FECHADA";
         }
 
@@ -139,8 +138,8 @@ public class Disciplina {
     }
 
     // public void addAluno(Aluno aluno) {
-    //     if (alunosMatriculados.size() < maxAlunos) {
-    //         alunosMatriculados.add(aluno);
+    //     if (alunosMatriculadosMatriculados.size() < maxalunosMatriculados) {
+    //         alunosMatriculadosMatriculados.add(aluno);
     //         System.out.println("Aluno " + aluno.getNome() + " matriculado na disciplina " + this.nome);
     //         statusDisciplina(); 
     //     } else {
@@ -149,17 +148,13 @@ public class Disciplina {
     // }
 
     // public void removerAluno(Aluno aluno) {
-    //     if (alunosMatriculados.remove(aluno)) {
+    //     if (alunosMatriculadosMatriculados.remove(aluno)) {
     //         System.out.println("Aluno " + aluno.getNome() + " removido da disciplina " + this.nome);
     //         statusDisciplina(); 
     //     } else {
     //         System.out.println("Aluno não encontrado na disciplina.");
     //     }
     // }
-
-    public List<Aluno> alunosMatriculados() {
-        return alunosMatriculados;
-    }
 
     public void cancelarDisciplina() {
         status = "CANCELADA";
@@ -168,10 +163,6 @@ public class Disciplina {
 
     public String getNome() {
         return nome;
-    }
-
-    public Boolean getEhObrigatoria() {
-        return ehObrigatoria;
     }
 
     public Boolean getEhObrigatoria() {
