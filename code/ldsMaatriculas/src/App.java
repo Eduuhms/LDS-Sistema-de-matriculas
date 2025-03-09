@@ -224,6 +224,7 @@ public class App {
             System.out.println("1 - Se matricular em uma disciplina");
             System.out.println("2 - Se matricular em um curso");
             System.out.println("3 - Cancelar matrícula do curso");
+            System.out.println("4 - Cancelar matrícula da disciplina");
             System.out.println("0 - Sair");
             opcao = scanner.nextInt();
             
@@ -284,6 +285,10 @@ public class App {
                 case 3:
                     cancelarMatricula(aluno);
                     break;
+                case 4:
+                    System.out.println("Digite o código da disciplina: ");
+                    String codigoDisciplina = scanner.next();
+                    aluno.cancelarMatricula(aluno.getMatricula(),codigoDisciplina);
                 case 0:
                     System.out.println("Saindo...");
                     break;
