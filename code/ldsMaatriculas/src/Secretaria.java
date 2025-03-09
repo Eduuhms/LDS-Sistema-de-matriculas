@@ -114,7 +114,7 @@ public class Secretaria extends Usuario implements ResponsavelMatricula {
     @Override
     public void cadastrar() {
         super.cadastrar(); // Chama o método cadastrar da classe Usuario para cadastrar no usuarios.csv
-        try (FileWriter writer = new FileWriter("LDS-Sistema-de-matriculas\\code\\ldsMaatriculas\\src\\csv\\secretarias.csv",
+        try (FileWriter writer = new FileWriter("code\\ldsMaatriculas\\src\\csv\\secretarias.csv",
                 true)) {
             writer.append("\n")
                     .append(String.valueOf(id)).append(",");

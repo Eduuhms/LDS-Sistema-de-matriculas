@@ -17,7 +17,7 @@ public class ResponsavelFinanceiro extends Usuario {
     @Override
     public void cadastrar() {
         super.cadastrar(); 
-        try (FileWriter writer = new FileWriter("LDS-Sistema-de-matriculas\\code\\ldsMaatriculas\\src\\csv\\responsavelFinanceiro.csv",
+        try (FileWriter writer = new FileWriter("code\\ldsMaatriculas\\src\\csv\\responsavelFinanceiro.csv",
                 true)) {
             writer.append("\n")
                     .append(String.valueOf(id)).append(",");
