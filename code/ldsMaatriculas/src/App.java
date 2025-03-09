@@ -24,8 +24,6 @@ public class App {
 
             switch (option) {
                 case 1:
-                    // Secretaria secretaria = new Secretaria("Patricia", "patricia@gmail.com", "patricia");
-                    // secretaria.gerarCurriculo("291266"); 
                     Login(scanner);
                     break;
                 case 2:
