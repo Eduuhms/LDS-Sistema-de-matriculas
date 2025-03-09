@@ -1,1 +1,3 @@
-id,matricula,curso_id
+id,matricula,nome,curso_id,disciplinas_obrigatorias,disciplinas_optativas
+3,291266,Julia,1,3;2;,null
+4,48591,Laura,1,null,null,

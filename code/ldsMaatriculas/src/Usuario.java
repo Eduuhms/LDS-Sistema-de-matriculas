@@ -12,6 +12,14 @@ public abstract class Usuario {
     protected String senha;
     protected final TipoUsuario tipo;
 
+    public Usuario(){
+        this.id = 0;
+        this.nome = null;
+        this.email = null;
+        this.senha = null;
+        this.tipo = null;
+    }
+
     public Usuario(String nome, String email, String senha, TipoUsuario tipo) {
         this.id = proximoId++;
         this.nome = nome;
@@ -21,7 +29,6 @@ public abstract class Usuario {
     }
 
     public Usuario(String nome, String email, String senha, TipoUsuario tipo, int id){
-        this.id = proximoId++;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
@@ -30,6 +37,8 @@ public abstract class Usuario {
     }
 
     public abstract void setDados();
+
+    public abstract void setDados(Boolean classes);
 
     private static int encontrarUltimoId() {
         int ultimoId = 0;
@@ -84,7 +93,7 @@ public abstract class Usuario {
 
                     switch (tipo) {
                         case ALUNO:
-                            return new Aluno(nome, email, senha, "", null);
+                            return new Aluno(nome, email, senha, Integer.parseInt(id));
                         case PROFESSOR:
                             return new Professor(nome, email, senha, id);
                         case SECRETARIA:

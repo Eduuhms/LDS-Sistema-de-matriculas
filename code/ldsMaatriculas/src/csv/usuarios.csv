@@ -1,3 +1,5 @@
 id,nome,email,senha,tipo
 1,r,r,r,PROFESSOR
 2,t,t,t,PROFESSOR
+3,o,o,o,ALUNO
+4,Laura,laura,laura,ALUNO

@@ -222,4 +222,9 @@ public void gerarCurriculo(String matricula) {
     public void setDados(){
         return;
     }
+
+    @Override
+    public void setDados(Boolean classes){
+        return;
+    }
 }

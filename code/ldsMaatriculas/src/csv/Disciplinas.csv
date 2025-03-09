@@ -1,2 +1,6 @@
-nome,codigo,creditos,ehObrigatoria,status
-eue,12,12,true
+nome,codigo,creditos,ehObrigatoria,status,alunos
+Calculo,1,4,true,ABERTA,48591
+AEDS,2,4,true,ABERTA,291266;
+Filosofia,3,4,true,ABERTA,291266;291206
+Trabalho Interdiciplinar,4,4,true,ABERTA,null
+Religiao,5,4,true,ABERTA,null

@@ -35,7 +35,7 @@ public class Professor extends Usuario {
         String codigosDisciplinas = "";
         for (Disciplina disciplina : this.disciplinas){
             codigosDisciplinas += disciplina.getCodigo();
-            codigosDisciplinas += "|";
+            codigosDisciplinas += ";";
         }
         try (FileWriter writer = new FileWriter("code\\ldsMaatriculas\\src\\csv\\professores.csv", true)) {
             writer.append("\n")
@@ -49,7 +49,7 @@ public class Professor extends Usuario {
     public List<Aluno> visualizarAlunos(Disciplina disciplina) {
         Disciplina disciplinaProcurada = procurarDisciplina(disciplina);
         if (disciplinaProcurada != null){
-            List<Aluno> alunos = disciplina.alunosMatriculados();
+            List<Aluno> alunos = disciplinaProcurada.alunosMatriculados();
             return alunos;
         }
         return null;
@@ -66,6 +66,11 @@ public class Professor extends Usuario {
 
     @Override
     public void setDados(){
+        setDados(false);
+    }
+
+    @Override
+    public void setDados(Boolean classes){
         try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\professores.csv"))) {
             String linha;
             while ((linha = reader.readLine()) != null) {
@@ -76,19 +81,21 @@ public class Professor extends Usuario {
                 String idCsv = dados[0];
 
                 if (idCsv.equals(String.valueOf(this.getId()))){
-                    String stringDisciplinas = dados[1];
-                    String[] codigosDisciplinas = stringDisciplinas.split("\\|");
-                    
-                    for (String codigoDisciplina : codigosDisciplinas){
-                        Disciplina disciplina = new Disciplina(codigoDisciplina);
-                        try {
-                            disciplina.preencherComDadosCsv();
-                            disciplinas.add(disciplina);
-                            
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                    }  
+                    if (classes){
+                        String stringDisciplinas = dados[1];
+                        String[] codigosDisciplinas = stringDisciplinas.split(";");
+                        
+                        for (String codigoDisciplina : codigosDisciplinas){
+                            Disciplina disciplina = new Disciplina(codigoDisciplina);
+                            try {
+                                disciplina.preencherComDadosCsv(true);
+                                disciplinas.add(disciplina);
+                                
+                            } catch (Exception e) {
+                                System.out.println(e);
+                            }
+                        }  
+                    }
                     
                     return;
                 }
