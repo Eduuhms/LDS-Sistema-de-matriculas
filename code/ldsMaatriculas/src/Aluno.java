@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Aluno extends Usuario implements ResponsavelMatricula {
@@ -63,7 +62,11 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
             writer.append("\n")
                   .append(String.valueOf(id)).append(",")
                   .append(matricula).append(",")
-                  .append(null);
+                  .append(nome).append(",")
+                  .append(null).append(",")
+                  .append(null).append(",")
+                  .append(null).append(",");
+                  
         } catch (IOException e) {
             e.printStackTrace();
         }
