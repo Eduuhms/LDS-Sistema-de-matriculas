@@ -272,6 +272,9 @@ public class App {
                         System.out.println("");
                     }
                     break;
+                case 3:
+                    cancelarMatricula(aluno);
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -280,6 +283,16 @@ public class App {
             }
             
         } while (opcao != 0);
+    }
+
+    private static void cancelarMatricula(Aluno aluno){
+        try {
+            aluno.desmatricular();
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     private static void funcoesProfessor(Professor professor, Scanner scanner){
@@ -308,9 +321,6 @@ public class App {
             
         } while (opcao != 0);
     }
-
-
-
 
     private static void cadastrarAluno(Scanner scanner) {
         String[] dados = lerDadosUsuario(scanner);

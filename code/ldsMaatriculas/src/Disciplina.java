@@ -210,12 +210,25 @@ public class Disciplina {
     }
 
     public void removerAluno(Aluno aluno) throws Exception{
-        if (alunosMatriculados.remove(aluno)) {
-            System.out.println("Aluno " + aluno.getNome() + " removido da disciplina " + this.nome);
+        int indice, cont;
+        cont = 0; indice = 0;
+        Boolean encontrado = false;
+
+        for (Aluno alunoMatriculado : alunosMatriculados){
+            if (alunoMatriculado.getMatricula().equalsIgnoreCase(aluno.getMatricula())){
+                indice = cont;
+                encontrado = true;
+            }
+            cont ++;
+        }
+
+        if (encontrado){
+            alunosMatriculados.remove(indice);
             statusDisciplina(); 
             atualizarRegistroCsv();
             return;
-        } 
+
+        }
 
         throw new Exception ("Aluno não encontrado na disciplina.");
     }

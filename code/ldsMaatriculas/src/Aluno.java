@@ -65,6 +65,30 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
         atualizarRegistroCsv();
     }
 
+    public void desmatricular() throws Exception{
+        if (curso == null){
+            throw new Exception("Aluno não pertence a nenhum curso");
+        }
+
+        List<Disciplina> disciplinas = this.getDisciplinas();
+        for (Disciplina disciplina : disciplinas){
+            disciplina.removerAluno(this);
+        }
+
+        disciplinasObrigatorias = new ArrayList<>();
+        disciplinasOptativas = new ArrayList<>();
+        curso = null;
+
+        atualizarRegistroCsv();
+    }
+
+    public List<Disciplina> getDisciplinas(){
+        List<Disciplina> juncao = new ArrayList<>();
+        juncao.addAll(disciplinasObrigatorias);
+        juncao.addAll(disciplinasOptativas);
+        return juncao;
+    }
+
     public Aluno(String matricula, String nome, Curso curso, List<Disciplina> disciplinasObrigatorias,
      List<Disciplina> disciplinasOptativas){
         super();
@@ -290,11 +314,12 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
                     codigosDisciplinasObrigatorias = codigosDisciplinasObrigatorias.equals("") ? null : codigosDisciplinasObrigatorias;
                     codigosDisciplinasOptativas = codigosDisciplinasOptativas.equals("") ? null : codigosDisciplinasOptativas;
 
+                    String cursoId = this.curso == null ? "null" : String.valueOf(curso.getIdCurso());
                     StringBuilder novaLinha = new StringBuilder();
                     novaLinha.append(this.id).append(",")
                              .append(this.matricula).append(",")
                              .append(this.nome).append(",")
-                             .append(this.curso.getIdCurso()).append(",")
+                             .append(cursoId).append(",")
                              .append(codigosDisciplinasObrigatorias).append(",")
                              .append(codigosDisciplinasOptativas).append("");
 
