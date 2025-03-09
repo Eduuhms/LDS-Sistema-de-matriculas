@@ -1,5 +1,5 @@
 id,matricula,nome,curso_id,disciplinas_obrigatorias,disciplinas_optativas
-3,291266,Julia,1,3;2;,null
+3,291266,Julia,null,null,null
 4,48591,Laura,1,null,null
-5,209183,p,1,1;3;2;,null
+5,209183,p,1,1;3;,null
 6,422473,matsu,null,null,null

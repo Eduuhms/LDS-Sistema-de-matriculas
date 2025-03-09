@@ -37,7 +37,7 @@ public class Disciplina {
             this.codigo = codigo;
             this.creditos = creditos;
             this.ehObrigatoria = ehObrigatoria;
-            this.status = "ABERTA";
+            this.status = "INATIVA";
             this.alunosMatriculados = new ArrayList<>();
             this.nome = nome;
         }
@@ -47,7 +47,7 @@ public class Disciplina {
         this.nome = null;
         this.creditos = 0;
         this.ehObrigatoria = false;
-        this.status = "ABERTA";
+        this.status = "INATIVA";
         this.alunosMatriculados = new ArrayList<>();
     }
 
@@ -237,7 +237,7 @@ public class Disciplina {
         List<Disciplina> disciplinas = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv"))) {
             String linha;
-            boolean primeiraLinha = true; // Pula o cabeçalho
+            boolean primeiraLinha = true; 
             while ((linha = reader.readLine()) != null) {
                 if (primeiraLinha) {
                     primeiraLinha = false;
