@@ -388,7 +388,7 @@ public class App {
                 System.out.println("Digite o número do curso: ");
                 numeroCurso = scanner.nextInt();
                 Curso cursoEscolhido = cursosDisponiveis.get(numeroCurso);
-                cursoEscolhido.atualizarRegistroCsv();
+                cursoEscolhido.setDados(true);
                 System.out.println("Disciplinas existentes: ");
                 List<Disciplina> disciplinasDisponiveis = Disciplina.carregarDisciplinas();
                 int numeroDisciplina = 0;
