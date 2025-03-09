@@ -26,6 +26,7 @@ public class Disciplina {
             this.ehObrigatoria = ehObrigatoria;
             this.status = status;
             this.alunosMatriculados = new ArrayList<>();
+            this.nome = nome;
         }
 
     public Disciplina(String nome,
@@ -37,6 +38,7 @@ public class Disciplina {
             this.ehObrigatoria = ehObrigatoria;
             this.status = "ABERTA";
             this.alunosMatriculados = new ArrayList<>();
+            this.nome = nome;
         }
 
     public Disciplina(String codigo) {
@@ -55,6 +57,13 @@ public class Disciplina {
     }
 
     public void salvarDisciplina() {
+        String codigosAlunos = "";
+        for (Aluno alunoMatriculado : this.alunosMatriculados){
+            codigosAlunos += alunoMatriculado.getMatricula();
+            codigosAlunos += ";";
+        }
+        codigosAlunos = codigosAlunos.equals("") ? null : codigosAlunos;
+
         try (FileWriter writer = new FileWriter("code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv", true)) {
             if (new java.io.File("code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv").length() == 0) {
                 writer.append("nome,codigo,creditos,ehObrigatoria\n");
@@ -62,7 +71,9 @@ public class Disciplina {
             writer.append(nome).append(",")
                   .append(codigo).append(",")
                   .append(String.valueOf(creditos)).append(",")
-                  .append(String.valueOf(ehObrigatoria)).append("\n");
+                  .append(String.valueOf(ehObrigatoria)).append(",")
+                  .append(String.valueOf(status)).append(",")
+                  .append(String.valueOf(codigosAlunos)).append("\n");
             System.out.println("Disciplina salva com sucesso no arquivo Disciplinas.csv.");
         } catch (IOException e) {
             e.printStackTrace();

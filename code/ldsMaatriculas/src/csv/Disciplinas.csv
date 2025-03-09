@@ -1,6 +1,7 @@
 nome,codigo,creditos,ehObrigatoria,status,alunos
-Calculo,1,4,true,ABERTA,48591
-AEDS,2,4,true,ABERTA,291266;
-Filosofia,3,4,true,ABERTA,291266;291206
+Calculo,1,4,true,ABERTA,48591;209183
+AEDS,2,4,true,ABERTA,291266;209183
+Filosofia,3,4,true,ABERTA,291266;209183
 Trabalho Interdiciplinar,4,4,true,ABERTA,null
 Religiao,5,4,true,ABERTA,null
+joa,39,29,false,ABERTA,null

@@ -101,7 +101,7 @@ public void gerarCurriculo(String matricula) {
             while ((linha = br.readLine()) != null) {
                 String[] dados = linha.split(",");
                 if (dados.length >= 3) {
-                    alunos.put(dados[1], dados[0] + "," + dados[2]); // matricula -> id,curso_id
+                    alunos.put(dados[1], dados[0] + "," + dados[3]); // matricula -> id,curso_id
                 }
             }
         } catch (IOException e) {
