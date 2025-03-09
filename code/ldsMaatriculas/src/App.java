@@ -205,6 +205,10 @@ public class App {
                     Secretaria secretaria = (Secretaria) usuario;
                     funcoesSecretaria(secretaria, scanner);
                     break;
+                case RESPOSAVELFINANCEIRO:
+                    ResponsavelFinanceiro responsavel = (ResponsavelFinanceiro) usuario;
+                    funcoesFinanceiro(responsavel, scanner);
+                    break;
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
             }
@@ -363,6 +367,28 @@ public class App {
         } while (opcao != 0);
     }
 
+    private static void funcoesFinanceiro(ResponsavelFinanceiro financeiro, Scanner scanner){
+        int opcao;
+        do { 
+            System.out.println("1 - Gerar cobrança para um aluno");
+            System.out.println("0 - Sair");
+            opcao = scanner.nextInt();
+            
+            switch(opcao) {
+                case 1:
+                    System.out.println("Digite a matricula do aluno:");
+                    String matricula = scanner.next();
+                    financeiro.gerarCobranca(matricula);
+                    break;
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+            
+        } while (opcao != 0);
+    }
 
 
 

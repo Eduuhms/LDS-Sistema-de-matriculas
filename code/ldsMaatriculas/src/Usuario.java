@@ -98,6 +98,8 @@ public abstract class Usuario {
                             return new Professor(nome, email, senha, id);
                         case SECRETARIA:
                             return new Secretaria(nome, email, senha);
+                        case RESPOSAVELFINANCEIRO:
+                            return new ResponsavelFinanceiro(nome, email, senha);
                         default:
                             throw new IllegalArgumentException("Tipo de usuário desconhecido: " + tipo);
                     }
