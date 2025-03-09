@@ -19,6 +19,13 @@ public class Curso {
         this.creditos = 0;
         this.disciplinas = new ArrayList<>();
     }
+
+    public Curso(String nome, int creditos, int idCurso){
+        this.idCurso = idCurso;
+        this.nome = nome;
+        this.creditos = creditos;
+        this.disciplinas = new ArrayList<>();
+    }
     
     // Construtor sem idCurso (gerado automaticamente)
     public Curso(String nome, int creditos) {
@@ -75,7 +82,7 @@ public class Curso {
                 int idCurso = Integer.parseInt(dados[0]);
                 String nome = dados[1];
                 int creditos = Integer.parseInt(dados[2]);
-                cursos.add(new Curso(nome, creditos));
+                cursos.add(new Curso(nome, creditos, idCurso));
             }
         } catch (IOException e) {
             e.printStackTrace();

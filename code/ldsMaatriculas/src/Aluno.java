@@ -56,6 +56,15 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
         return this.matricula;
     }
 
+    public Curso getCurso(){
+        return this.curso;
+    }
+
+    public void setCurso(Curso curso){
+        this.curso = curso;
+        atualizarRegistroCsv();
+    }
+
     public Aluno(String matricula, String nome, Curso curso, List<Disciplina> disciplinasObrigatorias,
      List<Disciplina> disciplinasOptativas){
         super();
@@ -69,6 +78,7 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
     private String randomMatricula() {
         return String.valueOf((int) (Math.random() * 1000000));
     }
+
 
     @Override
     public void cadastrar() {
@@ -90,6 +100,7 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
     public void confirmarMatricula() {}
     public void cancelarMatricula(Disciplina disciplina) {}
 
+    
     @Override
     public void setDados(){
         setDados(false);
@@ -114,7 +125,7 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
 
                     if (classes){
                         String idCursoCsv = dados[3];
-                        if (idCursoCsv != null){
+                        if (!idCursoCsv.equals("null")){
                             this.curso = new Curso(Integer.parseInt(idCursoCsv));
                             curso.setDados(true);
                             
@@ -124,15 +135,18 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
                             idsDisciplinas = !"null".equals(dados[5]) ? idsDisciplinas + dados[5] : idsDisciplinas;
                             
                                 for (String idDisciplina : idsDisciplinas.split(";")){
-                                    for (Disciplina disciplinaCurso : disciplinasCurso){
-                                        if (idDisciplina.equalsIgnoreCase(String.valueOf(disciplinaCurso.getCodigo()))){
-                                            if (disciplinaCurso.getEhObrigatoria()){
-                                                this.disciplinasObrigatorias.add(disciplinaCurso);
-                                            } else {
-                                                this.disciplinasOptativas.add(disciplinaCurso);
+                                    if (!idDisciplina.equals("null")){
+                                        for (Disciplina disciplinaCurso : disciplinasCurso){
+                                            if (idDisciplina.equalsIgnoreCase(String.valueOf(disciplinaCurso.getCodigo()))){
+                                                if (disciplinaCurso.getEhObrigatoria()){
+                                                    this.disciplinasObrigatorias.add(disciplinaCurso);
+                                                } else {
+                                                    this.disciplinasOptativas.add(disciplinaCurso);
+                                                }
+                                                break;
                                             }
-                                            break;
-                                        }
+                                    }
+                                    
                                 }
                             }
                             
@@ -216,7 +230,99 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
     }
     
     
-    public void matricularDisciplina(Disciplina disciplina) {}
+    public void matricularDisciplina(Disciplina disciplina) throws Exception {
+        if (this.curso != null){
+            if (disciplina.isEhObrigatoria()){
+                if (disciplinasObrigatorias.size() < MAX_OBRIGATORIAS){
+                    for (Disciplina disciplinaCadastrada : disciplinasObrigatorias){
+                        if (disciplinaCadastrada.equals(disciplina)){
+                            throw new Exception("Aluno já cadastrado na disciplina!");
+                        }
+                    }
+                    disciplinasObrigatorias.add(disciplina);
+                    disciplina.addAluno(this);
+                    atualizarRegistroCsv();
+                    return;
+                }
+            }
+            else if (!disciplina.isEhObrigatoria()){
+                if (disciplinasOptativas.size() < MAX_OPTATIVAS){
+                    for (Disciplina disciplinaCadastrada : disciplinasOptativas){
+                        if (disciplinaCadastrada.equals(disciplina)){
+                            throw new Exception("Aluno já cadastrado na disciplina!");
+                        }
+                    }
+                    disciplinasOptativas.add(disciplina);
+                    disciplina.addAluno(this);
+                    atualizarRegistroCsv();
+                    return;
+                }
+            }
+    
+            String stringObrigatorio = disciplina.isEhObrigatoria() ? "obrigatórias" : "optativas";
+            throw new Exception("Número de disciplinas " + stringObrigatorio + " atingido: " + (disciplina.isEhObrigatoria() ? MAX_OBRIGATORIAS : MAX_OPTATIVAS));
+        }
+        throw new Exception("Se matricule em um curso antes de escolher as disciplinas!");
+    }
+
+    public void atualizarRegistroCsv(){
+        String arquivoCSV = "code\\ldsMaatriculas\\src\\csv\\alunos.csv";
+        List<String> linhas = new ArrayList<>();
+        boolean encontrada = false;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(arquivoCSV))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                String[] dados = linha.split(",");
+                if (dados.length > 1 && dados[1].equals(this.matricula)) {
+                    String codigosDisciplinasObrigatorias = "";
+                    for (Disciplina disciplinaMatriculada : this.disciplinasObrigatorias){
+                        codigosDisciplinasObrigatorias += disciplinaMatriculada.getCodigo();
+                        codigosDisciplinasObrigatorias += ";";
+                    }
+
+                    String codigosDisciplinasOptativas = "";
+                    for (Disciplina disciplinaMatriculada : this.disciplinasOptativas){
+                        codigosDisciplinasOptativas += disciplinaMatriculada.getCodigo();
+                        codigosDisciplinasOptativas += ";";
+                    }
+
+                    codigosDisciplinasObrigatorias = codigosDisciplinasObrigatorias.equals("") ? null : codigosDisciplinasObrigatorias;
+                    codigosDisciplinasOptativas = codigosDisciplinasOptativas.equals("") ? null : codigosDisciplinasOptativas;
+
+                    StringBuilder novaLinha = new StringBuilder();
+                    novaLinha.append(this.id).append(",")
+                             .append(this.matricula).append(",")
+                             .append(this.nome).append(",")
+                             .append(this.curso.getIdCurso()).append(",")
+                             .append(codigosDisciplinasObrigatorias).append(",")
+                             .append(codigosDisciplinasOptativas).append("");
+
+                    linhas.add(novaLinha.toString());
+                    encontrada = true;
+                } else {
+                    linhas.add(linha);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        if (!encontrada) {
+            System.out.println("Erro: Aluno com matrícula " + this.matricula + " não encontrada!");
+            return;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoCSV))) {
+            for (String linha : linhas) {
+                writer.write(linha);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     
 }

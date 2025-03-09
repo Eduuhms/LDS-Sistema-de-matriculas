@@ -197,6 +197,9 @@ public class App {
                     Professor professor = (Professor) usuario;
                     funcoesProfessor(professor, scanner);
                     break;
+                case ALUNO: 
+                    Aluno aluno = (Aluno) usuario;
+                    funcoesAluno(aluno, scanner);
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
             }
@@ -206,8 +209,81 @@ public class App {
         }
     }
 
+    private static void funcoesAluno(Aluno aluno, Scanner scanner){
+        int opcao;
+        do { 
+            System.out.println("1 - Se matricular em uma disciplina");
+            System.out.println("2 - Se matricular em um curso");
+            System.out.println("3 - Cancelar matrícula do curso");
+            System.out.println("0 - Sair");
+            opcao = scanner.nextInt();
+            
+            switch(opcao) {
+                case 1:
+                    try {
+                        if (aluno.getCurso() == null){
+                            throw new Exception("Se matricule em um curso antes de escolher as disciplinas!");
+                        }
+                        List<Disciplina> disciplinasCurso = aluno.getCurso().getDisciplinas();
+                        System.out.println("Disciplinas disponíveis: ");
+                        int numeroDisciplina = 0;
+                        for (Disciplina disciplinaCurso : disciplinasCurso){
+                            System.out.println(numeroDisciplina  + " - " + disciplinaCurso.getNome() + " (" + (disciplinaCurso.isEhObrigatoria()? "OBRIGATÓRIA" : "OPTATIVA") + ")");
+                            numeroDisciplina ++;
+                        }
+
+                        System.out.println("Digite o número da discplina: ");
+                        numeroDisciplina = scanner.nextInt();
+
+                        Disciplina disciplinaEscolhida = disciplinasCurso.get(numeroDisciplina);
+                        
+                        aluno.matricularDisciplina(disciplinaEscolhida);
+                        System.out.println("Matrícula realizada com sucesso!");
+                    }
+                    catch (Exception e){
+                        System.out.println(e.getMessage());
+                        System.out.println("");
+                    }
+                    break;
+
+                case 2:
+                    try {
+                        if (aluno.getCurso() != null){
+                            throw new Exception("Entre com um pedido de cancelamento da matrícula no curso para poder escolher outro!");
+                        }
+
+                        List<Curso> cursosDisponiveis = Curso.carregarCursos();
+                        
+                        System.out.println("Cursos disponíveis: ");
+                        int numeroCurso = 0;
+                        for (Curso cursoDisponivel : cursosDisponiveis){
+                            System.out.println(numeroCurso  + " - " + cursoDisponivel.getNome());
+                            numeroCurso ++;
+                        }
+
+                        System.out.println("Digite o número do curso: ");
+                        numeroCurso = scanner.nextInt();
+                        Curso cursoEscolhido = cursosDisponiveis.get(numeroCurso);
+                        aluno.setCurso(cursoEscolhido);
+                        System.out.println("Matrícula realizada com sucesso!.");
+                    
+                    } catch (Exception e) {
+                        System.err.println(e.getMessage());
+                        System.out.println("");
+                    }
+                    break;
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+            
+        } while (opcao != 0);
+    }
+
     private static void funcoesProfessor(Professor professor, Scanner scanner){
-        int opcao = 0;
+        int opcao;
         do { 
             System.out.println("1 - Pesquisar alunos de uma disciplina");
             System.out.println("0 - Sair");

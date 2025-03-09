@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -80,19 +81,66 @@ public class Disciplina {
         }
     }
 
-    public void gerarCurriculo() {}
-    public void fecharMatriculas() {}
-    public void addAluno(Aluno aluno) {}
-    public void removerAluno(Aluno aluno) {}
-
     public List<Aluno> alunosMatriculados() {
         return alunosMatriculados;
+    }
+
+    public void atualizarRegistroCsv(){
+        String arquivoCSV = "code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv";
+        List<String> linhas = new ArrayList<>();
+        boolean encontrada = false;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(arquivoCSV))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                String[] dados = linha.split(",");
+                if (dados.length > 1 && dados[1].equals(this.codigo)) {
+                    String codigosAlunos = "";
+                    for (Aluno alunoMatriculado : this.alunosMatriculados){
+                        codigosAlunos += alunoMatriculado.getMatricula();
+                        codigosAlunos += ";";
+                    }
+
+                    codigosAlunos = codigosAlunos.equals("") ? null : codigosAlunos;
+
+                    StringBuilder novaLinha = new StringBuilder();
+                    novaLinha.append(this.nome).append(",")
+                             .append(this.codigo).append(",")
+                             .append(this.creditos).append(",")
+                             .append(this.ehObrigatoria).append(",")
+                             .append(this.status).append(",")
+                             .append(codigosAlunos).append("");
+
+                    linhas.add(novaLinha.toString());
+                    encontrada = true;
+                } else {
+                    linhas.add(linha);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        if (!encontrada) {
+            System.out.println("Erro: Disciplina com código " + this.codigo + " não encontrada!");
+            return;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoCSV))) {
+            for (String linha : linhas) {
+                writer.write(linha);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void preencherComDadosCsv() throws Exception{
         preencherComDadosCsv(false);
     }
-
+    
     public void preencherComDadosCsv(Boolean classes) throws Exception{
         try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv"))) {
             String linha;
@@ -119,10 +167,11 @@ public class Disciplina {
                         String stringalunosMatriculados = dados[5];
                         String[] codigosalunosMatriculados = stringalunosMatriculados.split(";");
                         for (String codigoAluno : codigosalunosMatriculados){
-                            Aluno aluno = new Aluno(codigoAluno, "");
-                            aluno.setDados();
-                            alunosMatriculados.add(aluno);
-
+                            if (!codigoAluno.equals("null")){
+                                Aluno aluno = new Aluno(codigoAluno, "");
+                                aluno.setDados();
+                                alunosMatriculados.add(aluno);
+                            }
                         }
                     }
                     return;
@@ -148,24 +197,27 @@ public class Disciplina {
         return status;
     }
 
-    // public void addAluno(Aluno aluno) {
-    //     if (alunosMatriculadosMatriculados.size() < maxalunosMatriculados) {
-    //         alunosMatriculadosMatriculados.add(aluno);
-    //         System.out.println("Aluno " + aluno.getNome() + " matriculado na disciplina " + this.nome);
-    //         statusDisciplina(); 
-    //     } else {
-    //         System.out.println("Não foi possível matricular o aluno. A disciplina está cheia.");
-    //     }
-    // }
+    public void addAluno(Aluno aluno) throws Exception{
+        if (alunosMatriculados.size() < maxAlunos) {
+            alunosMatriculados.add(aluno);
+            System.out.println("Aluno " + aluno.getNome() + " matriculado na disciplina " + this.nome);
+            statusDisciplina();
+            atualizarRegistroCsv();
+            return;
+        } 
 
-    // public void removerAluno(Aluno aluno) {
-    //     if (alunosMatriculadosMatriculados.remove(aluno)) {
-    //         System.out.println("Aluno " + aluno.getNome() + " removido da disciplina " + this.nome);
-    //         statusDisciplina(); 
-    //     } else {
-    //         System.out.println("Aluno não encontrado na disciplina.");
-    //     }
-    // }
+        throw new Exception ("Não foi possível matricular o aluno. A disciplina está cheia.");
+    }
+
+    public void removerAluno(Aluno aluno) throws Exception{
+        if (alunosMatriculados.remove(aluno)) {
+            System.out.println("Aluno " + aluno.getNome() + " removido da disciplina " + this.nome);
+            statusDisciplina(); 
+            return;
+        } 
+
+        throw new Exception ("Aluno não encontrado na disciplina.");
+    }
 
     public void cancelarDisciplina() {
         status = "CANCELADA";
@@ -186,7 +238,6 @@ public class Disciplina {
 
     @Override
 	public boolean equals(Object outroObjeto) {
-		
 		Disciplina outraDisciplina = (Disciplina) outroObjeto;
         Boolean resultado = this.codigo.equals(outraDisciplina.getCodigo());
         if (resultado == true){
