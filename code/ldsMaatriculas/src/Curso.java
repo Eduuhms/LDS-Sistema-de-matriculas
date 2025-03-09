@@ -145,6 +145,7 @@ public class Curso {
         }
     }
 
+
     public List<Disciplina> carregarDisciplinasDoCurso() {
         List<Disciplina> disciplinasDoCurso = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\DisciplinasCurso.csv"))) {
