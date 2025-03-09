@@ -4,9 +4,6 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        String nome;
-        String email;
-        String senha;
         Scanner scanner = new Scanner(System.in);
         int option;
 
@@ -16,7 +13,8 @@ public class App {
             System.out.println("3 - Cadastrar professor");
             System.out.println("4 - Cadastrar secretario(a)");
             System.out.println("5 - Cadastrar responsavel financeiro");
-            System.out.println("6 - Cadastrar e listar cursos"); // Novo caso
+            System.out.println("6 - Cadastrar e listar cursos");
+            System.out.println("7 - Manipular disciplinas"); 
             System.out.println("0 - Sair");
             System.out.print("Escolha uma opção: ");
             option = scanner.nextInt();
@@ -37,8 +35,11 @@ public class App {
                 case 5:
                     cadastrarResponsavelFinanceiro(scanner);
                     break;
-                case 6: 
+                case 6:
                     manipularCursos(scanner);
+                    break;
+                case 7: 
+                    manipularDisciplinas(scanner);
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -51,31 +52,107 @@ public class App {
         scanner.close();
     }
 
-    // private static void lerDisciplinasCsv(){
-    //     try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\usuarios.csv"))) {
-    //         String linha;
-    //         boolean primeiraLinha = true; // Flag para identificar a primeira linha
-    //         while ((linha = reader.readLine()) != null) {
-    //             if (primeiraLinha) {
-    //                 primeiraLinha = false; // Pula a primeira linha
-    //                 continue;
-    //             }
-    //             if (linha.trim().isEmpty()) {
-    //                 continue; // Ignora linhas vazias
-    //             }
-    //             String[] dados = linha.split(",");
-    //             String nome, codigo, status;
-    //             int creditos;
-    //             boolean ehObrigatoria;
+    private static void manipularDisciplinas(Scanner scanner) {
+        System.out.println("1 - Cadastrar disciplina");
+        System.out.println("2 - Matricular aluno em disciplina");
+        System.out.println("3 - Verificar status da disciplina");
+        System.out.println("4 - Listar alunos matriculados");
+        System.out.print("Escolha uma opção: ");
+        int opcao = scanner.nextInt();
 
-    //             nome = dados[0];
-    //             codigo = dados[1];
-    //             creditos = Integer.parseInt(dados[2]);
-    //             ehObrigatoria = Boolean.parseBoolean(dados[3]);
-    //             Disciplina disciplina = new Disciplina(nome, codigo, creditos, ehObrigatoria);
+        switch (opcao) {
+            case 1:
+                cadastrarDisciplina(scanner);
+                break;
+            // case 2:
+            //     matricularAluno(scanner);
+            //     break;
+            case 3:
+                verificarStatusDisciplina(scanner);
+                break;
+            // case 4:
+            //     listarAlunosMatriculados(scanner);
+            //     break;
+            default:
+                System.out.println("Opção inválida.");
+        }
+    }
+
+    private static void cadastrarDisciplina(Scanner scanner) {
+        scanner.nextLine();
+        System.out.println("Nome da disciplina:");
+        String nome = scanner.nextLine();
+        System.out.println("Código da disciplina:");
+        String codigo = scanner.nextLine();
+        System.out.println("Créditos da disciplina:");
+        int creditos = scanner.nextInt();
+        System.out.println("É obrigatória? (true/false):");
+        boolean ehObrigatoria = scanner.nextBoolean();
+    
+        Disciplina disciplina = new Disciplina(nome, codigo, creditos, ehObrigatoria);
+    
+        disciplina.salvarDisciplina();
+    
+        System.out.println("Disciplina cadastrada com sucesso!");
+        System.out.println(disciplina);
+    }
+
+    // private static void matricularAluno(Scanner scanner) {
+    //     scanner.nextLine(); 
+    //     System.out.println("Código da disciplina:");
+    //     String codigoDisciplina = scanner.nextLine();
+    //     System.out.println("Nome do aluno:");
+    //     String nomeAluno = scanner.nextLine();
+    //     System.out.println("Email do aluno:");
+    //     String emailAluno = scanner.nextLine();
+    //     System.out.println("Senha do aluno:");
+    //     String senhaAluno = scanner.nextLine();
+
+    //     Disciplina disciplina = new Disciplina(codigoDisciplina);
+    //     try {
+    //         disciplina.preencherComDadosCsv(); 
+    //     } catch (Exception e) {
+    //         System.err.println("Erro ao carregar disciplina: " + e.getMessage());
+    //         return;
+    //     }
+
+    //     Aluno aluno = new Aluno(nomeAluno, emailAluno, senhaAluno);
+    //     disciplina.addAluno(aluno); 
+    // }
+
+    private static void verificarStatusDisciplina(Scanner scanner) {
+        scanner.nextLine(); 
+        System.out.println("Código da disciplina:");
+        String codigoDisciplina = scanner.nextLine();
+
+        Disciplina disciplina = new Disciplina(codigoDisciplina);
+        try {
+            disciplina.preencherComDadosCsv();
+            System.out.println("Status da disciplina: " + disciplina.statusDisciplina());
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar disciplina: " + e.getMessage());
+        }
+    }
+
+    // private static void listarAlunosMatriculados(Scanner scanner) {
+    //     scanner.nextLine(); 
+    //     System.out.println("Código da disciplina:");
+    //     String codigoDisciplina = scanner.nextLine();
+
+    //     Disciplina disciplina = new Disciplina(codigoDisciplina);
+    //     try {
+    //         disciplina.preencherComDadosCsv(); 
+    //         List<Aluno> alunos = disciplina.alunosMatriculados();
+    //         if (alunos.isEmpty()) {
+    //             System.out.println("Nenhum aluno matriculado na disciplina.");
+    //         } else {
+    //             System.out.println("Alunos matriculados na disciplina:");
+    //             for (Aluno aluno : alunos) {
+    //                 System.out.println(aluno.getNome());
+    //             }
     //         }
-    //     } catch (IOException e) {
-    //         e.printStackTrace();
+    //     } catch (Exception e) {
+    //         System.err.println("Erro ao carregar disciplina: " + e.getMessage());
     //     }
     // }
 
@@ -88,7 +165,6 @@ public class App {
         if (usuario != null) {
             usuario.setDados();
             System.out.println("Bem Vindo, " + usuario.getNome());
-            
         } else {
             System.out.println("Email ou senha incorretos.");
         }
@@ -100,13 +176,6 @@ public class App {
         aluno.cadastrar();
     }
 
-    // private static void cadastrarProfessor(Scanner scanner) {
-    //     String[] dados = lerDadosUsuario(scanner);
-    //     Professor professor = new Professor(dados[0], dados[1], dados[2]);
-    //     professor.cadastrar();
-    // }
-
-    // Função de teste
     private static void cadastrarProfessor(Scanner scanner) {
         String[] dados = lerDadosUsuario(scanner);
         List<String> palavras = new ArrayList<>();
@@ -114,14 +183,13 @@ public class App {
         System.out.println("Quantidade disciplinas: ");
         List<Disciplina> disciplinas = new ArrayList<>();
         int qnt = scanner.nextInt();
-        while (qnt != 0){
+        while (qnt != 0) {
             codigo = scanner.next();
             Disciplina disciplina = new Disciplina(codigo);
             try {
                 disciplina.preencherComDadosCsv();
                 disciplinas.add(disciplina);
-                qnt --;
-                
+                qnt--;
             } catch (Exception e) {
                 System.err.println(e);
             }
@@ -152,7 +220,6 @@ public class App {
         return new String[]{nome, email, senha};
     }
 
-    // Novo método para manipular cursos
     private static void manipularCursos(Scanner scanner) {
         System.out.println("1 - Cadastrar curso");
         System.out.println("2 - Listar cursos");
@@ -171,9 +238,8 @@ public class App {
         }
     }
 
-    // Método para cadastrar um novo curso
     private static void cadastrarCurso(Scanner scanner) {
-        scanner.nextLine(); // Consumir a nova linha
+        scanner.nextLine();
         System.out.println("Nome do curso:");
         String nome = scanner.nextLine();
         System.out.println("Créditos do curso:");
@@ -184,7 +250,6 @@ public class App {
         System.out.println("Curso cadastrado com sucesso!");
     }
 
-    // Método para listar todos os cursos cadastrados
     private static void listarCursos() {
         List<Curso> cursos = Curso.carregarCursos();
         if (cursos.isEmpty()) {
