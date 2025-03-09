@@ -62,6 +62,7 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
         //Encontrando o ID do aluno com base na matrícula
         try (BufferedReader brAlunos = new BufferedReader(new FileReader(arquivoAlunos))) {
             String linha;
+            brAlunos.readLine();
             while ((linha = brAlunos.readLine()) != null) {
                 String[] dados = linha.split(",");
                 String id = dados[0].trim();
@@ -84,6 +85,7 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
         //Removendo a matrícula do aluno no arquivo matriculas.csv
         try (BufferedReader brMatriculas = new BufferedReader(new FileReader(arquivoMatriculas))) {
             String linha;
+            brMatriculas.readLine();
             while ((linha = brMatriculas.readLine()) != null) {
                 String[] dados = linha.split(",");
                 String idAlunoMatricula = dados[0].trim();
