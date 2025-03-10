@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,6 +28,10 @@ public class Professor extends Usuario {
     public Professor(String nome, String email, String senha, List<Disciplina> disciplinas) {
         super(nome, email, senha, TipoUsuario.PROFESSOR); 
         this.disciplinas = disciplinas;
+    }
+
+    public List<Disciplina> getDisciplinas(){
+        return disciplinas;
     }
 
      @Override
@@ -64,6 +69,39 @@ public class Professor extends Usuario {
         return null;
     }
 
+    public void addDisciplina(Disciplina disciplina) throws Exception{
+        for (Disciplina disciplinaCadastrada : disciplinas){
+            if (disciplinaCadastrada.getCodigo().equals(disciplina.getCodigo())){
+                throw new Exception("Disciplina já ministrada pelo professor.");
+            }
+        }
+        disciplina.preencherComDadosCsv(true);
+        this.disciplinas.add(disciplina);
+        atualizarRegistroCsv();
+    }
+
+    public void removeDisciplina(Disciplina disciplinaRemover) throws Exception{
+        int indice, cont;
+        cont = 0; indice = 0;
+        boolean encontrado = false;
+
+        for (Disciplina disciplinaCadastrada : disciplinas){
+            if (disciplinaCadastrada.getCodigo().equals(disciplinaRemover.getCodigo())){
+                indice = cont;
+                encontrado = true;
+            }
+            cont ++;
+        }
+
+        if (encontrado){
+            disciplinas.remove(indice);
+            atualizarRegistroCsv();
+            return;
+        }
+
+        throw new Exception("Disciplina não encontrada!");
+    }
+
     @Override
     public void setDados(){
         setDados(false);
@@ -99,6 +137,54 @@ public class Professor extends Usuario {
                     
                     return;
                 }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void atualizarRegistroCsv(){
+        String arquivoCSV = "code\\ldsMaatriculas\\src\\csv\\professores.csv";
+        List<String> linhas = new ArrayList<>();
+        boolean encontrada = false;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(arquivoCSV))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                String[] dados = linha.split(",");
+                if (dados.length > 1 && dados[0].equals(String.valueOf(this.id))) {
+                    String codigosDisciplinas = "";
+                    for (Disciplina disciplinaRegristada : this.disciplinas){
+                        codigosDisciplinas += disciplinaRegristada.getCodigo();
+                        codigosDisciplinas += ";";
+                    }
+
+                    codigosDisciplinas = codigosDisciplinas.equals("") ? null : codigosDisciplinas;
+
+                    StringBuilder novaLinha = new StringBuilder();
+                    novaLinha.append(this.id).append(",")
+                             .append(codigosDisciplinas).append("");
+
+                    linhas.add(novaLinha.toString());
+                    encontrada = true;
+                } else {
+                    linhas.add(linha);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        if (!encontrada) {
+            System.out.println("Erro: Professor com id " + this.id + " não encontrada!");
+            return;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoCSV))) {
+            for (String linha : linhas) {
+                writer.write(linha);
+                writer.newLine();
             }
         } catch (IOException e) {
             e.printStackTrace();

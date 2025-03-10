@@ -311,6 +311,8 @@ public class App {
         int opcao;
         do { 
             System.out.println("1 - Pesquisar alunos de uma disciplina");
+            System.out.println("2 - Se cadastrar em uma disciplina");
+            System.out.println("3 - Remover uma disciplina");
             System.out.println("0 - Sair");
             opcao = scanner.nextInt();
             
@@ -324,6 +326,53 @@ public class App {
                     List<Aluno> alunos = professor.visualizarAlunos(disciplinaComparacao);
                     System.out.println(alunos);
                     break;
+                case 2:
+                    try {
+                        System.out.println("Disciplinas disponíveis");
+                        List<Disciplina> disciplinaDisponiveis = Disciplina.carregarDisciplinas();
+                        int numeroDisciplina = 0;
+                            for (Disciplina disciplinaDisponivel : disciplinaDisponiveis){
+                                System.out.println(numeroDisciplina  + " - " + disciplinaDisponivel.getNome());
+                                numeroDisciplina ++;
+                            }
+
+                        System.out.println("Digite o número da disciplina: ");
+                        numeroDisciplina = scanner.nextInt();
+                        Disciplina disciplinaEscolhida = disciplinaDisponiveis.get(numeroDisciplina);
+                        professor.addDisciplina(disciplinaEscolhida);
+                        System.out.println("Disciplina registrada!");
+
+                    }catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+
+                case 3:
+                    try {
+                        System.out.println("Disciplinas disponíveis");
+                        List<Disciplina> disciplinaDisponiveis = professor.getDisciplinas();
+                        int numeroDisciplina = 0;
+
+                        if (disciplinaDisponiveis.isEmpty()){
+                            throw new Exception("Nenhuma disciplina encontrada!");
+                        }
+
+                        for (Disciplina disciplinaDisponivel : disciplinaDisponiveis){
+                            System.out.println(numeroDisciplina  + " - " + disciplinaDisponivel.getNome());
+                            numeroDisciplina ++;
+                        }
+
+                        System.out.println("Digite o número da disciplina: ");
+                        numeroDisciplina = scanner.nextInt();
+                        Disciplina disciplinaEscolhida = disciplinaDisponiveis.get(numeroDisciplina);
+                        professor.removeDisciplina(disciplinaEscolhida);
+                        System.out.println("Disciplina removida!");
+
+                    }catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                
                 case 0:
                     System.out.println("Saindo...");
                     break;
