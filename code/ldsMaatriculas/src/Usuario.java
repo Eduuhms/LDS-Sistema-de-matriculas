@@ -4,8 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public abstract class Usuario {
-    private static int proximoId = encontrarUltimoId() + 1; // Inicializa com o último ID + 1
-
+    private static int proximoId = encontrarUltimoId() + 1; 
     protected int id;
     protected String nome;
     protected String email;
@@ -44,14 +43,14 @@ public abstract class Usuario {
         int ultimoId = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\usuarios.csv"))) {
             String linha;
-            boolean primeiraLinha = true; // Flag para identificar a primeira linha
+            boolean primeiraLinha = true; 
             while ((linha = reader.readLine()) != null) {
                 if (primeiraLinha) {
-                    primeiraLinha = false; // Pula a primeira linha
+                    primeiraLinha = false; 
                     continue;
                 }
                 if (linha.trim().isEmpty()) {
-                    continue; // Ignora linhas vazias
+                    continue; 
                 }
                 String[] dados = linha.split(",");
                 int idAtual = Integer.parseInt(dados[0]);
@@ -83,7 +82,7 @@ public abstract class Usuario {
             String linha;
             while ((linha = reader.readLine()) != null) {
                 if (linha.trim().isEmpty()) {
-                    continue; // Ignora linhas vazias
+                    continue; 
                 }
                 String[] dados = linha.split(",");
                 if (dados[2].equals(email) && dados[3].equals(senha)) {

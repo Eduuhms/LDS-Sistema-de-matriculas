@@ -9,14 +9,14 @@ public class LeituraCsv {
         List<String> linhas = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String linha;
-            boolean primeiraLinha = true; // Flag para identificar a primeira linha
+            boolean primeiraLinha = true; 
             while ((linha = reader.readLine()) != null) {
                 if (primeiraLinha) {
-                    primeiraLinha = false; // Pula a primeira linha
+                    primeiraLinha = false; 
                     continue;
                 }
                 if (linha.trim().isEmpty()) {
-                    continue; // Ignora linhas vazias
+                    continue; 
                 }
                 linhas.add(linha);
             }

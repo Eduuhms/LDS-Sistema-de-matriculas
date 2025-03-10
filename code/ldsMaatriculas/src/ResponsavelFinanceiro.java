@@ -34,7 +34,7 @@ public class ResponsavelFinanceiro extends Usuario {
             while ((linha = br.readLine()) != null) {
                 String[] dados = linha.split(",");
                 if (dados.length >= 2) {
-                    alunos.put(dados[1], dados[0]); // matricula -> id
+                    alunos.put(dados[1], dados[0]); 
                 }
             }
         } catch (IOException e) {
@@ -47,15 +47,13 @@ public class ResponsavelFinanceiro extends Usuario {
             return;
         }
 
-        // Calcular o valor da cobrança
         Cobranca cobranca = new Cobranca();
         float valor = cobranca.calcularValorTotal(matricula);
 
-        // Gerar o id autoincrementado
         int novoId = 1;
         try (BufferedReader br = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\cobrancas.csv"))) {
             String linha;
-            br.readLine(); // Pular o cabeçalho
+            br.readLine(); 
             while ((linha = br.readLine()) != null) {
                 String[] dados = linha.split(",");
                 if (dados.length >= 1) {
@@ -69,7 +67,6 @@ public class ResponsavelFinanceiro extends Usuario {
             e.printStackTrace();
         }
 
-        // Escrever a nova cobrança no arquivo cobrancas.csv
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("code\\ldsMaatriculas\\src\\csv\\cobrancas.csv", true))) {
             String novaCobranca = novoId + "," + alunoId + "," + valor;
             bw.write(novaCobranca);

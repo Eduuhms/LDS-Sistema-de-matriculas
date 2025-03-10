@@ -106,7 +106,7 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
 
     @Override
     public void cadastrar() {
-        super.cadastrar(); // Chama o método cadastrar da classe Usuario para cadastrar no usuarios.csv
+        super.cadastrar(); 
         try (FileWriter writer = new FileWriter("code\\ldsMaatriculas\\src\\csv\\alunos.csv", true)) {
             writer.append("\n")
                   .append(String.valueOf(id)).append(",")
@@ -200,10 +200,9 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
         List<String> linhasDisciplinas = new ArrayList<>();
         String alunoId = null;
     
-        // 1. Encontrar o ID do aluno com base na matrícula
         try (BufferedReader brAlunos = new BufferedReader(new FileReader(arquivoAlunos))) {
             String linha;
-            brAlunos.readLine(); // Pular o cabeçalho
+            brAlunos.readLine(); 
             while ((linha = brAlunos.readLine()) != null) {
                 String[] dados = linha.split(",");
                 String id = dados[0].trim();
@@ -211,24 +210,20 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
     
                 if (matricula.equals(matriculaAluno)) {
                     alunoId = id;
-                    // Remover a disciplina do aluno
                     String disciplinasObrigatorias = dados[4].trim();
                     String disciplinasOptativas = dados[5].trim();
     
-                    // Remover a disciplina de obrigatórias, se existir
                     if (disciplinasObrigatorias.contains(codigoDisciplina)) {
                         disciplinasObrigatorias = disciplinasObrigatorias.replace(codigoDisciplina + ";", "").trim();
                     }
     
-                    // Remover a disciplina de optativas, se existir
                     if (disciplinasOptativas.contains(codigoDisciplina)) {
                         disciplinasOptativas = disciplinasOptativas.replace(codigoDisciplina + ";", "").trim();
                     }
     
-                    // Atualizar a linha do aluno
                     linha = id + "," + matricula + "," + dados[2] + "," + dados[3] + "," + disciplinasObrigatorias + "," + disciplinasOptativas;
                 }
-                linhasAlunos.add(linha); // Adicionar a linha (atualizada ou não) à lista
+                linhasAlunos.add(linha); 
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -238,33 +233,29 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
             System.out.println("Aluno com matrícula " + matriculaAluno + " não encontrado.");
             return;
         }
-    
-        // 2. Remover o aluno da disciplina no arquivo disciplinas.csv
+
         try (BufferedReader brDisciplinas = new BufferedReader(new FileReader(arquivoDisciplinas))) {
             String linha;
-            brDisciplinas.readLine(); // Pular o cabeçalho
+            brDisciplinas.readLine(); 
             while ((linha = brDisciplinas.readLine()) != null) {
                 String[] dados = linha.split(",");
                 String codigo = dados[1].trim();
                 String alunos = dados[5].trim();
     
                 if (codigo.equals(codigoDisciplina)) {
-                    // Remover o aluno da lista de alunos da disciplina
                     if (alunos.contains(alunoId)) {
                         alunos = alunos.replace(alunoId + ";", "").trim();
                     }
-                    // Atualizar a linha da disciplina
                     linha = dados[0] + "," + codigo + "," + dados[2] + "," + dados[3] + "," + dados[4] + "," + alunos;
                 }
-                linhasDisciplinas.add(linha); // Adicionar a linha (atualizada ou não) à lista
+                linhasDisciplinas.add(linha); 
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     
-        // 3. Reescrever o arquivo alunos.csv
         try (BufferedWriter bwAlunos = new BufferedWriter(new FileWriter(arquivoAlunos))) {
-            bwAlunos.write("id,matricula,nome,curso_id,disciplinas_obrigatorias,disciplinas_optativas"); // Escrever o cabeçalho
+            bwAlunos.write("id,matricula,nome,curso_id,disciplinas_obrigatorias,disciplinas_optativas"); 
             bwAlunos.newLine();
             for (String linha : linhasAlunos) {
                 bwAlunos.write(linha);
@@ -274,9 +265,8 @@ public class Aluno extends Usuario implements ResponsavelMatricula {
             e.printStackTrace();
         }
     
-        // 4. Reescrever o arquivo disciplinas.csv
         try (BufferedWriter bwDisciplinas = new BufferedWriter(new FileWriter(arquivoDisciplinas))) {
-            bwDisciplinas.write("nome,codigo,creditos,ehObrigatoria,status,alunos"); // Escrever o cabeçalho
+            bwDisciplinas.write("nome,codigo,creditos,ehObrigatoria,status,alunos"); 
             bwDisciplinas.newLine();
             for (String linha : linhasDisciplinas) {
                 bwDisciplinas.write(linha);

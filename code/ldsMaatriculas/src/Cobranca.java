@@ -10,7 +10,6 @@ public class Cobranca {
         Map<String, String> alunos = new HashMap<>();
         Map<String, Integer> disciplinas = new HashMap<>();
     
-        // Ler o arquivo alunos.csv
         try (BufferedReader br = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\alunos.csv"))) {
             String linha;
             br.readLine();
@@ -24,7 +23,6 @@ public class Cobranca {
             e.printStackTrace();
         }
     
-        // Ler o arquivo Disciplinas.csv
         try (BufferedReader br = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\Disciplinas.csv"))) {
             String linha;
             br.readLine();
@@ -42,7 +40,6 @@ public class Cobranca {
             e.printStackTrace();
         }
     
-        // Encontrar o id, disciplinas_obrigatorias e disciplinas_optativas do aluno com base na matrícula
         String alunoInfo = alunos.get(matricula);
         if (alunoInfo == null) {
             System.out.println("Aluno não encontrado.");
@@ -51,8 +48,7 @@ public class Cobranca {
         String[] alunoDados = alunoInfo.split(",");
         String disciplinasObrigatorias = alunoDados[1];
         String disciplinasOptativas = alunoDados[2];
-    
-        // Calcular a soma dos créditos das disciplinas matriculadas (obrigatórias e optativas)
+
         float somaCreditos = 0;
         if (!disciplinasObrigatorias.isEmpty() && !disciplinasObrigatorias.equals("null")) {
             String[] codigosObrigatorias = disciplinasObrigatorias.split(";");

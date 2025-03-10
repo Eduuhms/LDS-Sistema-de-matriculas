@@ -36,7 +36,7 @@ public class Professor extends Usuario {
 
      @Override
     public void cadastrar() {
-        super.cadastrar(); // Chama o método cadastrar da classe Usuario para cadastrar no usuarios.csv
+        super.cadastrar(); 
         String codigosDisciplinas = "";
         for (Disciplina disciplina : this.disciplinas){
             codigosDisciplinas += disciplina.getCodigo();
@@ -113,7 +113,7 @@ public class Professor extends Usuario {
             String linha;
             while ((linha = reader.readLine()) != null) {
                 if (linha.trim().isEmpty()) {
-                    continue; // Ignora linhas vazias
+                    continue; 
                 }
                 String[] dados = linha.split(",");
                 String idCsv = dados[0];

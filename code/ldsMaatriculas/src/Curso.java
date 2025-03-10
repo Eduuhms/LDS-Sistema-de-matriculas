@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Curso {
-    private static int proximoId = encontrarUltimoId() + 1; // Inicializa com o último ID + 1
-
+    private static int proximoId = encontrarUltimoId() + 1; 
     private int idCurso;
     private String nome;
     private int creditos;
@@ -28,9 +27,8 @@ public class Curso {
         this.disciplinas = new ArrayList<>();
     }
     
-    // Construtor sem idCurso (gerado automaticamente)
     public Curso(String nome, int creditos) {
-        this.idCurso = proximoId++; // Gera o próximo ID
+        this.idCurso = proximoId++; 
         this.nome = nome;
         this.creditos = creditos;
         this.disciplinas = new ArrayList<>();
@@ -75,7 +73,7 @@ public class Curso {
         List<Curso> cursos = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\cursos.csv"))) {
             String linha;
-            boolean primeiraLinha = true; // Pula o cabeçalho
+            boolean primeiraLinha = true; 
             while ((linha = reader.readLine()) != null) {
                 if (primeiraLinha) {
                     primeiraLinha = false;
@@ -98,7 +96,7 @@ public class Curso {
             String linha;
             while ((linha = reader.readLine()) != null) {
                 if (linha.trim().isEmpty()) {
-                    continue; // Ignora linhas vazias
+                    continue; 
                 }
                 String[] dados = linha.split(",");
                 String idCsv = dados[0];
@@ -142,7 +140,6 @@ public class Curso {
             }
             disciplinas.add(disciplina);
             atualizarRegistroCsv();
-            // salvarRelacaoDisciplina(disciplina.getCodigo());
             return;
         } 
         throw new Exception("Erro: Disciplina inválida.");
@@ -166,7 +163,7 @@ public class Curso {
         List<Disciplina> disciplinasDoCurso = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("code\\ldsMaatriculas\\src\\csv\\DisciplinasCurso.csv"))) {
             String linha;
-            boolean primeiraLinha = true; // Pula o cabeçalho
+            boolean primeiraLinha = true; 
             while ((linha = reader.readLine()) != null) {
                 if (primeiraLinha) {
                     primeiraLinha = false;
@@ -280,11 +277,8 @@ public class Curso {
 
     @Override
     public String toString() {
-        return "Curso{" +
-                "idCurso=" + idCurso +
-                ", nome='" + nome + '\'' +
-                ", creditos=" + creditos +
-                ", disciplinas=" + disciplinas +
-                '}';
+        return "Nome:'" + nome + '\'' +
+                ", idCurso:" + idCurso +
+                ", creditos:" + creditos ;
     }
 }
