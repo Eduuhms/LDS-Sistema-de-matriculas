@@ -20,11 +20,10 @@ s --> (Manter informações dos alunos)
 (Matricular em disciplina obrigatória) .>  matricular : include
  (Matricular em disciplina optativa) .> matricular : include
 
-(Inscrever para um semestre) as inscreverSemestre
-a --> matricular
-a --> inscreverSemestre
 
-inscreverSemestre --> rf
+a --> matricular
+
+
 (Gerar boleto de cobrança) as gerarBoleto
 rf --> gerarBoleto
 gerarBoleto --> a
